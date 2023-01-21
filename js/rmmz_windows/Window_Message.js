@@ -109,7 +109,7 @@ Window_Message.prototype.newLineX = function(textState) {
     const faceExists = $gameMessage.faceName() !== "";
     const faceWidth = ImageManager.faceWidth;
     const spacing = 20;
-    const margin = faceExists ? faceWidth + spacing : 4;
+    const margin = faceExists ? faceWidth + spacing : 0;
     return textState.rtl ? this.innerWidth - margin : margin;
 };
 
