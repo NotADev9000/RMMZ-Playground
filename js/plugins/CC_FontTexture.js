@@ -257,7 +257,7 @@ CC.FontTexture = {};
         const size = dataFont.size;
         const scale = this.fontSize / size;
         const texture = CC.FontTexture.colored(fontFace, this.textColor);
-        let ty = Math.round(y + lineHeight / 2 + this.fontSize * 0.35);
+        let ty = y + lineHeight - 1;
         context.save();
         if (_clip && maxWidth) {
             let clip_x = x - (_clipOverflowLeft * scale);

@@ -40,7 +40,11 @@ Window_Base.prototype.checkRectObject = function(rect) {
 };
 
 Window_Base.prototype.lineHeight = function() {
-    return 36;
+    return 9;
+};
+
+Window_Base.prototype.lineSpacing = function() {
+    return 4;
 };
 
 Window_Base.prototype.itemWidth = function() {
@@ -48,7 +52,7 @@ Window_Base.prototype.itemWidth = function() {
 };
 
 Window_Base.prototype.itemHeight = function() {
-    return this.lineHeight();
+    return this.lineHeight() + this.lineSpacing();
 };
 
 Window_Base.prototype.itemPadding = function() {
@@ -65,8 +69,12 @@ Window_Base.prototype.loadWindowskin = function() {
     this.windowskin = ImageManager.loadSystem("Window");
 };
 
+Window_Base.prototype.standardPadding = function() {
+    return $gameSystem.windowPadding();
+};
+
 Window_Base.prototype.updatePadding = function() {
-    this.padding = $gameSystem.windowPadding();
+    this.padding = this.standardPadding();
 };
 
 Window_Base.prototype.updateBackOpacity = function() {
@@ -74,7 +82,9 @@ Window_Base.prototype.updateBackOpacity = function() {
 };
 
 Window_Base.prototype.fittingHeight = function(numLines) {
-    return numLines * this.itemHeight() + $gameSystem.windowPadding() * 2;
+    const padding = this.standardPadding() * 2;
+    const allItemsHeight = numLines * this.itemHeight();
+    return (allItemsHeight + padding) - this.lineSpacing();
 };
 
 Window_Base.prototype.updateTone = function() {
@@ -267,7 +277,7 @@ Window_Base.prototype.flushTextState = function(textState) {
     const x = rtl ? textState.x - width : textState.x;
     const y = textState.y;
     if (textState.drawing) {
-        this.contents.drawText(text, x, y, width, height);
+        this.contents.drawText(text, x, y, width, this.lineHeight());
     }
     textState.x += rtl ? -width : width;
     textState.buffer = this.createTextBuffer(rtl);
@@ -409,13 +419,8 @@ Window_Base.prototype.makeFontSmaller = function() {
     }
 };
 
-Window_Base.prototype.calcTextHeight = function(textState) {
-    const lineSpacing = this.lineHeight() - $gameSystem.mainFontSize();
-    const lastFontSize = this.contents.fontSize;
-    const lines = textState.text.slice(textState.index).split("\n");
-    const textHeight = this.maxFontSizeInLine(lines[0]) + lineSpacing;
-    this.contents.fontSize = lastFontSize;
-    return textHeight;
+Window_Base.prototype.calcTextHeight = function() {
+    return this.lineHeight() + this.lineSpacing();
 };
 
 Window_Base.prototype.maxFontSizeInLine = function(line) {

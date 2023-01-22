@@ -38,8 +38,8 @@ Window_BattleStatus.prototype.rowSpacing = function() {
     return 0;
 };
 
-Window_BattleStatus.prototype.updatePadding = function() {
-    this.padding = 8;
+Window_BattleStatus.prototype.standardPadding = function() {
+    return 8;
 };
 
 Window_BattleStatus.prototype.actor = function(index) {

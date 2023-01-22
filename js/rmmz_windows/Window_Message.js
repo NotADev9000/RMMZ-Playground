@@ -78,6 +78,10 @@ Window_Message.prototype.update = function() {
     }
 };
 
+Window_Message.prototype.standardPadding = function() {
+    return 0;
+};
+
 Window_Message.prototype.checkToNotClose = function() {
     if (this.isOpen() && this.isClosing() && this.doesContinue()) {
         this.open();
@@ -344,7 +348,7 @@ Window_Message.prototype.isEndOfText = function(textState) {
 Window_Message.prototype.needsNewPage = function(textState) {
     return (
         !this.isEndOfText(textState) &&
-        textState.y + textState.height > this.contents.height
+        textState.y + this.lineHeight() > this.contents.height
     );
 };
 

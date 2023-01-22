@@ -205,9 +205,9 @@ Scene_Base.prototype.buttonY = function() {
     return this.buttonAreaTop() + offsetY;
 };
 
-Scene_Base.prototype.calcWindowHeight = function(numLines, selectable) {
-    if (selectable) {
-        return Window_Selectable.prototype.fittingHeight(numLines);
+Scene_Base.prototype.calcWindowHeight = function(numLines, windowClass) {
+    if (windowClass !== true && windowClass) {
+        return windowClass.prototype.fittingHeight(numLines);
     } else {
         return Window_Base.prototype.fittingHeight(numLines);
     }
