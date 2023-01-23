@@ -41,7 +41,7 @@ Scene_Shop.prototype.createGoldWindow = function() {
 
 Scene_Shop.prototype.goldWindowRect = function() {
     const ww = this.mainCommandWidth();
-    const wh = this.calcWindowHeight(1, true);
+    const wh = this.calcWindowHeight(1, Window_Gold);
     const wx = Graphics.boxWidth - ww;
     const wy = this.mainAreaTop();
     return new Rectangle(wx, wy, ww, wh);
@@ -62,7 +62,7 @@ Scene_Shop.prototype.commandWindowRect = function() {
     const wx = 0;
     const wy = this.mainAreaTop();
     const ww = this._goldWindow.x;
-    const wh = this.calcWindowHeight(1, true);
+    const wh = this.calcWindowHeight(1, Window_ShopCommand);
     return new Rectangle(wx, wy, ww, wh);
 };
 
@@ -147,7 +147,7 @@ Scene_Shop.prototype.categoryWindowRect = function() {
     const wx = 0;
     const wy = this._dummyWindow.y;
     const ww = Graphics.boxWidth;
-    const wh = this.calcWindowHeight(1, true);
+    const wh = this.calcWindowHeight(1, Window_ItemCategory);
     return new Rectangle(wx, wy, ww, wh);
 };
 

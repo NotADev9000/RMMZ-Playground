@@ -41,7 +41,7 @@ Scene_Skill.prototype.createSkillTypeWindow = function() {
 
 Scene_Skill.prototype.skillTypeWindowRect = function() {
     const ww = this.mainCommandWidth();
-    const wh = this.calcWindowHeight(3, true);
+    const wh = this.calcWindowHeight(3, Window_SkillType);
     const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
     const wy = this.mainAreaTop();
     return new Rectangle(wx, wy, ww, wh);

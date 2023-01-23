@@ -217,7 +217,7 @@ Scene_Battle.prototype.logWindowRect = function() {
     const wx = 0;
     const wy = 0;
     const ww = Graphics.boxWidth;
-    const wh = this.calcWindowHeight(10, false);
+    const wh = this.calcWindowHeight(10, Window_BattleLog);
     return new Rectangle(wx, wy, ww, wh);
 };
 
@@ -358,7 +358,7 @@ Scene_Battle.prototype.helpAreaBottom = function() {
 };
 
 Scene_Battle.prototype.helpAreaHeight = function() {
-    return this.calcWindowHeight(2, false);
+    return this.calcWindowHeight(2, Window_Help);
 };
 
 Scene_Battle.prototype.buttonAreaTop = function() {
@@ -366,7 +366,7 @@ Scene_Battle.prototype.buttonAreaTop = function() {
 };
 
 Scene_Battle.prototype.windowAreaHeight = function() {
-    return this.calcWindowHeight(4, true);
+    return this.calcWindowHeight(4);
 };
 
 Scene_Battle.prototype.createButtons = function() {

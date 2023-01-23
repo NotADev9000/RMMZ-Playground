@@ -39,7 +39,7 @@ Scene_GameEnd.prototype.createCommandWindow = function() {
 
 Scene_GameEnd.prototype.commandWindowRect = function() {
     const ww = this.mainCommandWidth();
-    const wh = this.calcWindowHeight(2, true);
+    const wh = this.calcWindowHeight(2, Window_GameEnd);
     const wx = (Graphics.boxWidth - ww) / 2;
     const wy = (Graphics.boxHeight - wh) / 2;
     return new Rectangle(wx, wy, ww, wh);

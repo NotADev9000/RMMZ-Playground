@@ -34,7 +34,7 @@ Scene_Options.prototype.createOptionsWindow = function() {
 Scene_Options.prototype.optionsWindowRect = function() {
     const n = Math.min(this.maxCommands(), this.maxVisibleCommands());
     const ww = 400;
-    const wh = this.calcWindowHeight(n, true);
+    const wh = this.calcWindowHeight(n, Window_Options);
     const wx = (Graphics.boxWidth - ww) / 2;
     const wy = (Graphics.boxHeight - wh) / 2;
     return new Rectangle(wx, wy, ww, wh);

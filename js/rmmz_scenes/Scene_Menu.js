@@ -62,7 +62,7 @@ Scene_Menu.prototype.createGoldWindow = function() {
 
 Scene_Menu.prototype.goldWindowRect = function() {
     const ww = this.mainCommandWidth();
-    const wh = this.calcWindowHeight(1, true);
+    const wh = this.calcWindowHeight(1, Window_Gold);
     const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
     const wy = this.mainAreaBottom() - wh;
     return new Rectangle(wx, wy, ww, wh);

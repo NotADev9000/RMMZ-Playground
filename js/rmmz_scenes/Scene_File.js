@@ -49,7 +49,7 @@ Scene_File.prototype.helpWindowRect = function() {
     const wx = 0;
     const wy = this.mainAreaTop();
     const ww = Graphics.boxWidth;
-    const wh = this.calcWindowHeight(1, false);
+    const wh = this.calcWindowHeight(1, Window_Help);
     return new Rectangle(wx, wy, ww, wh);
 };
 

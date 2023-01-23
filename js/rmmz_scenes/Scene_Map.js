@@ -282,7 +282,7 @@ Scene_Map.prototype.mapNameWindowRect = function() {
     const wx = 0;
     const wy = 0;
     const ww = 360;
-    const wh = this.calcWindowHeight(1, false);
+    const wh = this.calcWindowHeight(1, Window_MapName);
     return new Rectangle(wx, wy, ww, wh);
 };
 

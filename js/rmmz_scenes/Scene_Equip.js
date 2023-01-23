@@ -55,7 +55,7 @@ Scene_Equip.prototype.commandWindowRect = function() {
     const wx = this.statusWidth();
     const wy = this.mainAreaTop();
     const ww = Graphics.boxWidth - this.statusWidth();
-    const wh = this.calcWindowHeight(1, true);
+    const wh = this.calcWindowHeight(1, Window_EquipCommand);
     return new Rectangle(wx, wy, ww, wh);
 };
 

@@ -42,7 +42,7 @@ Scene_MenuBase.prototype.helpAreaBottom = function() {
 };
 
 Scene_MenuBase.prototype.helpAreaHeight = function() {
-    return this.calcWindowHeight(2, false);
+    return this.calcWindowHeight(2, Window_Help);
 };
 
 Scene_MenuBase.prototype.mainAreaTop = function() {

@@ -65,7 +65,7 @@ Scene_Status.prototype.createStatusParamsWindow = function() {
 
 Scene_Status.prototype.statusParamsWindowRect = function() {
     const ww = this.statusParamsWidth();
-    const wh = this.statusParamsHeight();
+    const wh = this.calcWindowHeight(6, Window_StatusParams);
     const wx = 0;
     const wy = this.mainAreaBottom() - this.profileHeight() - wh;
     return new Rectangle(wx, wy, ww, wh);
@@ -79,7 +79,7 @@ Scene_Status.prototype.createStatusEquipWindow = function() {
 
 Scene_Status.prototype.statusEquipWindowRect = function() {
     const ww = Graphics.boxWidth - this.statusParamsWidth();
-    const wh = this.statusParamsHeight();
+    const wh = this.calcWindowHeight(6, Window_StatusParams);
     const wx = this.statusParamsWidth();
     const wy = this.mainAreaBottom() - this.profileHeight() - wh;
     return new Rectangle(wx, wy, ww, wh);
@@ -89,12 +89,8 @@ Scene_Status.prototype.statusParamsWidth = function() {
     return 300;
 };
 
-Scene_Status.prototype.statusParamsHeight = function() {
-    return this.calcWindowHeight(6, false);
-};
-
 Scene_Status.prototype.profileHeight = function() {
-    return this.calcWindowHeight(2, false);
+    return this.calcWindowHeight(2, Window_Help);
 };
 
 Scene_Status.prototype.start = function() {

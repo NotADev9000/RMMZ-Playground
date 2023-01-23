@@ -39,7 +39,7 @@ Scene_Name.prototype.createEditWindow = function() {
 };
 
 Scene_Name.prototype.editWindowRect = function() {
-    const inputWindowHeight = this.calcWindowHeight(9, true);
+    const inputWindowHeight = this.calcWindowHeight(9, Window_NameInput);
     const padding = $gameSystem.windowPadding();
     const ww = 600;
     const wh = ImageManager.faceHeight + padding * 2;
@@ -60,7 +60,7 @@ Scene_Name.prototype.inputWindowRect = function() {
     const wx = this._editWindow.x;
     const wy = this._editWindow.y + this._editWindow.height + 8;
     const ww = this._editWindow.width;
-    const wh = this.calcWindowHeight(9, true);
+    const wh = this.calcWindowHeight(9, Window_NameInput);
     return new Rectangle(wx, wy, ww, wh);
 };
 

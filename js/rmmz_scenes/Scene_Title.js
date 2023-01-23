@@ -108,7 +108,7 @@ Scene_Title.prototype.commandWindowRect = function() {
     const offsetX = $dataSystem.titleCommandWindow.offsetX;
     const offsetY = $dataSystem.titleCommandWindow.offsetY;
     const ww = this.mainCommandWidth();
-    const wh = this.calcWindowHeight(3, true);
+    const wh = this.calcWindowHeight(3, Window_TitleCommand);
     const wx = (Graphics.boxWidth - ww) / 2 + offsetX;
     const wy = Graphics.boxHeight - wh - 96 + offsetY;
     return new Rectangle(wx, wy, ww, wh);

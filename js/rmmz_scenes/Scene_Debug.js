@@ -53,7 +53,7 @@ Scene_Debug.prototype.editWindowRect = function() {
     const wx = this._rangeWindow.width;
     const wy = 0;
     const ww = Graphics.boxWidth - wx;
-    const wh = this.calcWindowHeight(10, true);
+    const wh = this.calcWindowHeight(10, Window_DebugEdit);
     return new Rectangle(wx, wy, ww, wh);
 };
 

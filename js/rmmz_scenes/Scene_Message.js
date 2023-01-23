@@ -37,7 +37,7 @@ Scene_Message.prototype.createMessageWindow = function() {
 
 Scene_Message.prototype.messageWindowRect = function() {
     const ww = Graphics.boxWidth;
-    const wh = this.calcWindowHeight(4, false) + 8;
+    const wh = this.calcWindowHeight(4, Window_Message);
     const wx = (Graphics.boxWidth - ww) / 2;
     const wy = 0;
     return new Rectangle(wx, wy, ww, wh);
@@ -66,7 +66,7 @@ Scene_Message.prototype.createGoldWindow = function() {
 
 Scene_Message.prototype.goldWindowRect = function() {
     const ww = this.mainCommandWidth();
-    const wh = this.calcWindowHeight(1, true);
+    const wh = this.calcWindowHeight(1, Window_Gold);
     const wx = Graphics.boxWidth - ww;
     const wy = 0;
     return new Rectangle(wx, wy, ww, wh);
@@ -97,7 +97,7 @@ Scene_Message.prototype.eventItemWindowRect = function() {
     const wx = 0;
     const wy = 0;
     const ww = Graphics.boxWidth;
-    const wh = this.calcWindowHeight(4, true);
+    const wh = this.calcWindowHeight(4, Window_EventItem);
     return new Rectangle(wx, wy, ww, wh);
 };
 
