@@ -102,11 +102,8 @@ Scene_Boot.prototype.resizeScreen = function() {
 };
 
 Scene_Boot.prototype.adjustBoxSize = function() {
-    const uiAreaWidth = $dataSystem.advanced.uiAreaWidth;
-    const uiAreaHeight = $dataSystem.advanced.uiAreaHeight;
-    const boxMargin = 4;
-    Graphics.boxWidth = uiAreaWidth - boxMargin * 2;
-    Graphics.boxHeight = uiAreaHeight - boxMargin * 2;
+    Graphics.boxWidth = $dataSystem.advanced.uiAreaWidth;
+    Graphics.boxHeight = $dataSystem.advanced.uiAreaHeight;
 };
 
 Scene_Boot.prototype.adjustWindow = function() {
