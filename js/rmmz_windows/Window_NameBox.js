@@ -20,6 +20,10 @@ Window_NameBox.prototype.setMessageWindow = function(messageWindow) {
     this._messageWindow = messageWindow;
 };
 
+Window_NameBox.prototype.updateBackOpacity = function() {
+    this.backOpacity = 192;
+};
+
 Window_NameBox.prototype.setName = function(name) {
     if (this._name !== name) {
         this._name = name;

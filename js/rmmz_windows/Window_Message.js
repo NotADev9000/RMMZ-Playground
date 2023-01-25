@@ -78,8 +78,12 @@ Window_Message.prototype.update = function() {
     }
 };
 
+Window_Message.prototype.updateBackOpacity = function() {
+    this.backOpacity = 192;
+};
+
 Window_Message.prototype.standardPadding = function() {
-    return 0;
+    return 15;
 };
 
 Window_Message.prototype.checkToNotClose = function() {

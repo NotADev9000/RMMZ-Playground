@@ -24,7 +24,7 @@ Window.prototype.initialize = function() {
     this._animationCount = 0;
 
     this._padding = 12;
-    this._margin = 4;
+    this._margin = 3;
     this._colorTone = [0, 0, 0, 0];
     this._innerChildren = [];
 

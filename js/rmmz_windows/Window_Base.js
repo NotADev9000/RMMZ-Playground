@@ -40,7 +40,7 @@ Window_Base.prototype.checkRectObject = function(rect) {
 };
 
 Window_Base.prototype.lineHeight = function() {
-    return 9;
+    return 10;
 };
 
 Window_Base.prototype.lineSpacing = function() {
