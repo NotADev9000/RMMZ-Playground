@@ -98,14 +98,6 @@ Scene_Equip.prototype.statusWidth = function() {
     return 312;
 };
 
-Scene_Equip.prototype.needsPageButtons = function() {
-    return true;
-};
-
-Scene_Equip.prototype.arePageButtonsEnabled = function() {
-    return !(this._itemWindow && this._itemWindow.active);
-};
-
 Scene_Equip.prototype.refreshActor = function() {
     const actor = this.actor();
     this._statusWindow.setActor(actor);

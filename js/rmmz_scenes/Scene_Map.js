@@ -78,7 +78,6 @@ Scene_Map.prototype.shouldAutosave = function() {
 Scene_Map.prototype.update = function() {
     Scene_Message.prototype.update.call(this);
     this.updateDestination();
-    this.updateMenuButton();
     this.updateMapNameWindow();
     this.updateMainMultiply();
     if (this.isSceneChangeOk()) {
@@ -142,7 +141,6 @@ Scene_Map.prototype.terminate = function() {
     if (!SceneManager.isNextScene(Scene_Battle)) {
         this._spriteset.update();
         this._mapNameWindow.hide();
-        this.hideMenuButton();
         SceneManager.snapForBackground();
     }
     $gameScreen.clearZoom();
@@ -179,24 +177,6 @@ Scene_Map.prototype.updateDestination = function() {
     }
 };
 
-Scene_Map.prototype.updateMenuButton = function() {
-    if (this._menuButton) {
-        const menuEnabled = this.isMenuEnabled();
-        if (menuEnabled === this._menuEnabled) {
-            this._menuButton.visible = this._menuEnabled;
-        } else {
-            this._menuEnabled = menuEnabled;
-        }
-    }
-};
-
-Scene_Map.prototype.hideMenuButton = function() {
-    if (this._menuButton) {
-        this._menuButton.visible = false;
-        this._menuEnabled = false;
-    }
-};
-
 Scene_Map.prototype.updateMapNameWindow = function() {
     if ($gameMessage.isBusy()) {
         this._mapNameWindow.close();
@@ -213,7 +193,7 @@ Scene_Map.prototype.isMapTouchOk = function() {
 
 Scene_Map.prototype.processMapTouch = function() {
     if (TouchInput.isTriggered() || this._touchCount > 0) {
-        if (TouchInput.isPressed() && !this.isAnyButtonPressed()) {
+        if (TouchInput.isPressed()) {
             if (this._touchCount === 0 || this._touchCount >= 15) {
                 this.onMapTouch();
             }
@@ -222,10 +202,6 @@ Scene_Map.prototype.processMapTouch = function() {
             this._touchCount = 0;
         }
     }
-};
-
-Scene_Map.prototype.isAnyButtonPressed = function() {
-    return this._menuButton && this._menuButton.isPressed();
 };
 
 Scene_Map.prototype.onMapTouch = function() {
@@ -258,7 +234,6 @@ Scene_Map.prototype.createDisplayObjects = function() {
     this.createSpriteset();
     this.createWindowLayer();
     this.createAllWindows();
-    this.createButtons();
 };
 
 Scene_Map.prototype.createSpriteset = function() {
@@ -284,20 +259,6 @@ Scene_Map.prototype.mapNameWindowRect = function() {
     const ww = 360;
     const wh = this.calcWindowHeight(1, Window_MapName);
     return new Rectangle(wx, wy, ww, wh);
-};
-
-Scene_Map.prototype.createButtons = function() {
-    if (ConfigManager.touchUI) {
-        this.createMenuButton();
-    }
-};
-
-Scene_Map.prototype.createMenuButton = function() {
-    this._menuButton = new Sprite_Button("menu");
-    this._menuButton.x = Graphics.boxWidth - this._menuButton.width - 4;
-    this._menuButton.y = this.buttonY();
-    this._menuButton.visible = false;
-    this.addWindow(this._menuButton);
 };
 
 Scene_Map.prototype.updateTransferPlayer = function() {

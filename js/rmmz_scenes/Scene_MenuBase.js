@@ -19,22 +19,14 @@ Scene_MenuBase.prototype.create = function() {
     this.createBackground();
     this.updateActor();
     this.createWindowLayer();
-    this.createButtons();
 };
 
 Scene_MenuBase.prototype.update = function() {
     Scene_Base.prototype.update.call(this);
-    this.updatePageButtons();
 };
 
 Scene_MenuBase.prototype.helpAreaTop = function() {
-    if (this.isBottomHelpMode()) {
-        return this.mainAreaBottom();
-    } else if (this.isBottomButtonMode()) {
-        return 0;
-    } else {
-        return this.buttonAreaBottom();
-    }
+    return this.isBottomHelpMode() ? this.mainAreaBottom() : 0;
 };
 
 Scene_MenuBase.prototype.helpAreaBottom = function() {
@@ -46,13 +38,7 @@ Scene_MenuBase.prototype.helpAreaHeight = function() {
 };
 
 Scene_MenuBase.prototype.mainAreaTop = function() {
-    if (!this.isBottomHelpMode()) {
-        return this.helpAreaBottom();
-    } else if (this.isBottomButtonMode()) {
-        return 0;
-    } else {
-        return this.buttonAreaBottom();
-    }
+    return this.isBottomHelpMode() ? 0 : this.helpAreaBottom();
 };
 
 Scene_MenuBase.prototype.mainAreaBottom = function() {
@@ -60,7 +46,7 @@ Scene_MenuBase.prototype.mainAreaBottom = function() {
 };
 
 Scene_MenuBase.prototype.mainAreaHeight = function() {
-    return Graphics.boxHeight - this.buttonAreaHeight() - this.helpAreaHeight();
+    return Graphics.boxHeight - this.helpAreaHeight();
 };
 
 Scene_MenuBase.prototype.actor = function() {
@@ -96,58 +82,6 @@ Scene_MenuBase.prototype.helpWindowRect = function() {
     const ww = Graphics.boxWidth;
     const wh = this.helpAreaHeight();
     return new Rectangle(wx, wy, ww, wh);
-};
-
-Scene_MenuBase.prototype.createButtons = function() {
-    if (ConfigManager.touchUI) {
-        if (this.needsCancelButton()) {
-            this.createCancelButton();
-        }
-        if (this.needsPageButtons()) {
-            this.createPageButtons();
-        }
-    }
-};
-
-Scene_MenuBase.prototype.needsCancelButton = function() {
-    return true;
-};
-
-Scene_MenuBase.prototype.createCancelButton = function() {
-    this._cancelButton = new Sprite_Button("cancel");
-    this._cancelButton.x = Graphics.boxWidth - this._cancelButton.width - 4;
-    this._cancelButton.y = this.buttonY();
-    this.addWindow(this._cancelButton);
-};
-
-Scene_MenuBase.prototype.needsPageButtons = function() {
-    return false;
-};
-
-Scene_MenuBase.prototype.createPageButtons = function() {
-    this._pageupButton = new Sprite_Button("pageup");
-    this._pageupButton.x = 4;
-    this._pageupButton.y = this.buttonY();
-    const pageupRight = this._pageupButton.x + this._pageupButton.width;
-    this._pagedownButton = new Sprite_Button("pagedown");
-    this._pagedownButton.x = pageupRight + 4;
-    this._pagedownButton.y = this.buttonY();
-    this.addWindow(this._pageupButton);
-    this.addWindow(this._pagedownButton);
-    this._pageupButton.setClickHandler(this.previousActor.bind(this));
-    this._pagedownButton.setClickHandler(this.nextActor.bind(this));
-};
-
-Scene_MenuBase.prototype.updatePageButtons = function() {
-    if (this._pageupButton && this._pagedownButton) {
-        const enabled = this.arePageButtonsEnabled();
-        this._pageupButton.visible = enabled;
-        this._pagedownButton.visible = enabled;
-    }
-};
-
-Scene_MenuBase.prototype.arePageButtonsEnabled = function() {
-    return true;
 };
 
 Scene_MenuBase.prototype.nextActor = function() {

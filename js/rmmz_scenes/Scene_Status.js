@@ -98,10 +98,6 @@ Scene_Status.prototype.start = function() {
     this.refreshActor();
 };
 
-Scene_Status.prototype.needsPageButtons = function() {
-    return true;
-};
-
 Scene_Status.prototype.refreshActor = function() {
     const actor = this.actor();
     this._profileWindow.setText(actor.profile());

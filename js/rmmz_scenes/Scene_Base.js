@@ -172,37 +172,8 @@ Scene_Base.prototype.isBottomHelpMode = function() {
     return true;
 };
 
-Scene_Base.prototype.isBottomButtonMode = function() {
-    return false;
-};
-
-Scene_Base.prototype.isRightInputMode = function() {
-    return true;
-};
-
 Scene_Base.prototype.mainCommandWidth = function() {
     return 240;
-};
-
-Scene_Base.prototype.buttonAreaTop = function() {
-    if (this.isBottomButtonMode()) {
-        return Graphics.boxHeight - this.buttonAreaHeight();
-    } else {
-        return 0;
-    }
-};
-
-Scene_Base.prototype.buttonAreaBottom = function() {
-    return this.buttonAreaTop() + this.buttonAreaHeight();
-};
-
-Scene_Base.prototype.buttonAreaHeight = function() {
-    return 52;
-};
-
-Scene_Base.prototype.buttonY = function() {
-    const offsetY = Math.floor((this.buttonAreaHeight() - 48) / 2);
-    return this.buttonAreaTop() + offsetY;
 };
 
 Scene_Base.prototype.calcWindowHeight = function(numLines, windowClass = Window_Base) {

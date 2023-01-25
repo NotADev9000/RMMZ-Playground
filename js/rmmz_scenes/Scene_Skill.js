@@ -42,7 +42,7 @@ Scene_Skill.prototype.createSkillTypeWindow = function() {
 Scene_Skill.prototype.skillTypeWindowRect = function() {
     const ww = this.mainCommandWidth();
     const wh = this.calcWindowHeight(3, Window_SkillType);
-    const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
+    const wx = Graphics.boxWidth - ww;
     const wy = this.mainAreaTop();
     return new Rectangle(wx, wy, ww, wh);
 };
@@ -56,7 +56,7 @@ Scene_Skill.prototype.createStatusWindow = function() {
 Scene_Skill.prototype.statusWindowRect = function() {
     const ww = Graphics.boxWidth - this.mainCommandWidth();
     const wh = this._skillTypeWindow.height;
-    const wx = this.isRightInputMode() ? 0 : Graphics.boxWidth - ww;
+    const wx = 0;
     const wy = this.mainAreaTop();
     return new Rectangle(wx, wy, ww, wh);
 };
@@ -77,14 +77,6 @@ Scene_Skill.prototype.itemWindowRect = function() {
     const ww = Graphics.boxWidth;
     const wh = this.mainAreaHeight() - this._statusWindow.height;
     return new Rectangle(wx, wy, ww, wh);
-};
-
-Scene_Skill.prototype.needsPageButtons = function() {
-    return true;
-};
-
-Scene_Skill.prototype.arePageButtonsEnabled = function() {
-    return !this.isActorWindowActive();
 };
 
 Scene_Skill.prototype.refreshActor = function() {

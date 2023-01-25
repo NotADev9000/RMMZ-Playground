@@ -49,7 +49,7 @@ Scene_Menu.prototype.createCommandWindow = function() {
 Scene_Menu.prototype.commandWindowRect = function() {
     const ww = this.mainCommandWidth();
     const wh = this.mainAreaHeight() - this.goldWindowRect().height;
-    const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
+    const wx = Graphics.boxWidth - ww;
     const wy = this.mainAreaTop();
     return new Rectangle(wx, wy, ww, wh);
 };
@@ -63,7 +63,7 @@ Scene_Menu.prototype.createGoldWindow = function() {
 Scene_Menu.prototype.goldWindowRect = function() {
     const ww = this.mainCommandWidth();
     const wh = this.calcWindowHeight(1, Window_Gold);
-    const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
+    const wx = Graphics.boxWidth - ww;
     const wy = this.mainAreaBottom() - wh;
     return new Rectangle(wx, wy, ww, wh);
 };
@@ -77,7 +77,7 @@ Scene_Menu.prototype.createStatusWindow = function() {
 Scene_Menu.prototype.statusWindowRect = function() {
     const ww = Graphics.boxWidth - this.mainCommandWidth();
     const wh = this.mainAreaHeight();
-    const wx = this.isRightInputMode() ? 0 : Graphics.boxWidth - ww;
+    const wx = 0;
     const wy = this.mainAreaTop();
     return new Rectangle(wx, wy, ww, wh);
 };

@@ -12,7 +12,6 @@ Window_ChoiceList.prototype.constructor = Window_ChoiceList;
 
 Window_ChoiceList.prototype.initialize = function() {
     Window_Command.prototype.initialize.call(this, new Rectangle());
-    this.createCancelButton();
     this.openness = 0;
     this.deactivate();
     this._background = 0;
@@ -23,35 +22,15 @@ Window_ChoiceList.prototype.setMessageWindow = function(messageWindow) {
     this._messageWindow = messageWindow;
 };
 
-Window_ChoiceList.prototype.createCancelButton = function() {
-    if (ConfigManager.touchUI) {
-        this._cancelButton = new Sprite_Button("cancel");
-        this._cancelButton.visible = false;
-        this.addChild(this._cancelButton);
-    }
-};
-
 Window_ChoiceList.prototype.start = function() {
     this.updatePlacement();
     this.updateBackground();
-    this.placeCancelButton();
     this.createContents();
     this.refresh();
     this.scrollTo(0, 0);
     this.selectDefault();
     this.open();
     this.activate();
-};
-
-Window_ChoiceList.prototype.update = function() {
-    Window_Selectable.prototype.update.call(this);
-    this.updateCancelButton();
-};
-
-Window_ChoiceList.prototype.updateCancelButton = function() {
-    if (this._cancelButton) {
-        this._cancelButton.visible = this.needsCancelButton() && this.isOpen();
-    }
 };
 
 Window_ChoiceList.prototype.selectDefault = function() {
@@ -68,20 +47,6 @@ Window_ChoiceList.prototype.updatePlacement = function() {
 Window_ChoiceList.prototype.updateBackground = function() {
     this._background = $gameMessage.choiceBackground();
     this.setBackgroundType(this._background);
-};
-
-Window_ChoiceList.prototype.placeCancelButton = function() {
-    if (this._cancelButton) {
-        const spacing = 8;
-        const button = this._cancelButton;
-        const right = this.x + this.width;
-        if (right < Graphics.boxWidth - button.width + spacing) {
-            button.x = this.width + spacing;
-        } else {
-            button.x = -button.width - spacing;
-        }
-        button.y = this.height / 2 - button.height / 2;
-    }
 };
 
 Window_ChoiceList.prototype.windowX = function() {
@@ -157,10 +122,6 @@ Window_ChoiceList.prototype.drawItem = function(index) {
 
 Window_ChoiceList.prototype.isCancelEnabled = function() {
     return $gameMessage.choiceCancelType() !== -1;
-};
-
-Window_ChoiceList.prototype.needsCancelButton = function() {
-    return $gameMessage.choiceCancelType() === -2;
 };
 
 Window_ChoiceList.prototype.callOkHandler = function() {

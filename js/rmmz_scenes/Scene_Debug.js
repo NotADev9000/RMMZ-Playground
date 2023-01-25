@@ -21,10 +21,6 @@ Scene_Debug.prototype.create = function() {
     this.createDebugHelpWindow();
 };
 
-Scene_Debug.prototype.needsCancelButton = function() {
-    return false;
-};
-
 Scene_Debug.prototype.createRangeWindow = function() {
     const rect = this.rangeWindowRect();
     this._rangeWindow = new Window_DebugRange(rect);

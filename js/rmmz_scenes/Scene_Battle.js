@@ -42,7 +42,6 @@ Scene_Battle.prototype.updateVisibility = function() {
     this.updateLogWindowVisibility();
     this.updateStatusWindowVisibility();
     this.updateInputWindowVisibility();
-    this.updateCancelButton();
 };
 
 Scene_Battle.prototype.updateBattleProcess = function() {
@@ -172,18 +171,10 @@ Scene_Battle.prototype.needsInputWindowChange = function() {
     return windowActive !== inputting;
 };
 
-Scene_Battle.prototype.updateCancelButton = function() {
-    if (this._cancelButton) {
-        this._cancelButton.visible =
-            this.isAnyInputWindowActive() && !this._partyCommandWindow.active;
-    }
-};
-
 Scene_Battle.prototype.createDisplayObjects = function() {
     this.createSpriteset();
     this.createWindowLayer();
     this.createAllWindows();
-    this.createButtons();
     BattleManager.setLogWindow(this._logWindow);
     BattleManager.setSpriteset(this._spriteset);
     this._logWindow.setSpriteset(this._spriteset);
@@ -232,7 +223,7 @@ Scene_Battle.prototype.statusWindowRect = function() {
     const extra = 10;
     const ww = Graphics.boxWidth - 192;
     const wh = this.windowAreaHeight() + extra;
-    const wx = this.isRightInputMode() ? 0 : Graphics.boxWidth - ww;
+    const wx = 0;
     const wy = Graphics.boxHeight - wh + extra - 4;
     return new Rectangle(wx, wy, ww, wh);
 };
@@ -250,7 +241,7 @@ Scene_Battle.prototype.createPartyCommandWindow = function() {
 Scene_Battle.prototype.partyCommandWindowRect = function() {
     const ww = 192;
     const wh = this.windowAreaHeight();
-    const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
+    const wx = Graphics.boxWidth - ww;
     const wy = Graphics.boxHeight - wh;
     return new Rectangle(wx, wy, ww, wh);
 };
@@ -271,7 +262,7 @@ Scene_Battle.prototype.createActorCommandWindow = function() {
 Scene_Battle.prototype.actorCommandWindowRect = function() {
     const ww = 192;
     const wh = this.windowAreaHeight();
-    const wx = this.isRightInputMode() ? Graphics.boxWidth - ww : 0;
+    const wx = Graphics.boxWidth - ww;
     const wy = Graphics.boxHeight - wh;
     return new Rectangle(wx, wy, ww, wh);
 };
@@ -361,25 +352,8 @@ Scene_Battle.prototype.helpAreaHeight = function() {
     return this.calcWindowHeight(2, Window_Help);
 };
 
-Scene_Battle.prototype.buttonAreaTop = function() {
-    return this.helpAreaBottom();
-};
-
 Scene_Battle.prototype.windowAreaHeight = function() {
     return this.calcWindowHeight(4);
-};
-
-Scene_Battle.prototype.createButtons = function() {
-    if (ConfigManager.touchUI) {
-        this.createCancelButton();
-    }
-};
-
-Scene_Battle.prototype.createCancelButton = function() {
-    this._cancelButton = new Sprite_Button("cancel");
-    this._cancelButton.x = Graphics.boxWidth - this._cancelButton.width - 4;
-    this._cancelButton.y = this.buttonY();
-    this.addWindow(this._cancelButton);
 };
 
 Scene_Battle.prototype.closeCommandWindows = function() {
