@@ -18,7 +18,6 @@ Window_ShopNumber.prototype.initialize = function(rect) {
     this._price = 0;
     this._number = 1;
     this._currencyUnit = TextManager.currencyUnit;
-    this.createButtons();
     this.select(0);
     this._canRepeat = false;
 };
@@ -36,49 +35,12 @@ Window_ShopNumber.prototype.setup = function(item, max, price) {
     this._max = Math.floor(max);
     this._price = price;
     this._number = 1;
-    this.placeButtons();
     this.refresh();
 };
 
 Window_ShopNumber.prototype.setCurrencyUnit = function(currencyUnit) {
     this._currencyUnit = currencyUnit;
     this.refresh();
-};
-
-Window_ShopNumber.prototype.createButtons = function() {
-    this._buttons = [];
-    if (ConfigManager.touchUI) {
-        for (const type of ["down2", "down", "up", "up2", "ok"]) {
-            const button = new Sprite_Button(type);
-            this._buttons.push(button);
-            this.addInnerChild(button);
-        }
-        this._buttons[0].setClickHandler(this.onButtonDown2.bind(this));
-        this._buttons[1].setClickHandler(this.onButtonDown.bind(this));
-        this._buttons[2].setClickHandler(this.onButtonUp.bind(this));
-        this._buttons[3].setClickHandler(this.onButtonUp2.bind(this));
-        this._buttons[4].setClickHandler(this.onButtonOk.bind(this));
-    }
-};
-
-Window_ShopNumber.prototype.placeButtons = function() {
-    const sp = this.buttonSpacing();
-    const totalWidth = this.totalButtonWidth();
-    let x = (this.innerWidth - totalWidth) / 2;
-    for (const button of this._buttons) {
-        button.x = x;
-        button.y = this.buttonY();
-        x += button.width + sp;
-    }
-};
-
-Window_ShopNumber.prototype.totalButtonWidth = function() {
-    const sp = this.buttonSpacing();
-    return this._buttons.reduce((r, button) => r + button.width + sp, -sp);
-};
-
-Window_ShopNumber.prototype.buttonSpacing = function() {
-    return 8;
 };
 
 Window_ShopNumber.prototype.refresh = function() {
@@ -153,10 +115,6 @@ Window_ShopNumber.prototype.totalPriceY = function() {
     return Math.floor(this.itemNameY() + this.lineHeight() * 2);
 };
 
-Window_ShopNumber.prototype.buttonY = function() {
-    return Math.floor(this.totalPriceY() + this.lineHeight() * 2);
-};
-
 Window_ShopNumber.prototype.cursorWidth = function() {
     const padding = this.itemPadding();
     const digitWidth = this.textWidth("0");
@@ -219,24 +177,3 @@ Window_ShopNumber.prototype.itemRect = function() {
 Window_ShopNumber.prototype.isTouchOkEnabled = function() {
     return false;
 };
-
-Window_ShopNumber.prototype.onButtonUp = function() {
-    this.changeNumber(1);
-};
-
-Window_ShopNumber.prototype.onButtonUp2 = function() {
-    this.changeNumber(10);
-};
-
-Window_ShopNumber.prototype.onButtonDown = function() {
-    this.changeNumber(-1);
-};
-
-Window_ShopNumber.prototype.onButtonDown2 = function() {
-    this.changeNumber(-10);
-};
-
-Window_ShopNumber.prototype.onButtonOk = function() {
-    this.processOk();
-};
-

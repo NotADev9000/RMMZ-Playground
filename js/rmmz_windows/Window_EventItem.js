@@ -12,7 +12,6 @@ Window_EventItem.prototype.constructor = Window_EventItem;
 
 Window_EventItem.prototype.initialize = function(rect) {
     Window_ItemList.prototype.initialize.call(this, rect);
-    this.createCancelButton();
     this.openness = 0;
     this.deactivate();
     this.setHandler("ok", this.onOk.bind(this));
@@ -23,32 +22,12 @@ Window_EventItem.prototype.setMessageWindow = function(messageWindow) {
     this._messageWindow = messageWindow;
 };
 
-Window_EventItem.prototype.createCancelButton = function() {
-    if (ConfigManager.touchUI) {
-        this._cancelButton = new Sprite_Button("cancel");
-        this._cancelButton.visible = false;
-        this.addChild(this._cancelButton);
-    }
-};
-
 Window_EventItem.prototype.start = function() {
     this.refresh();
     this.updatePlacement();
-    this.placeCancelButton();
     this.forceSelect(0);
     this.open();
     this.activate();
-};
-
-Window_EventItem.prototype.update = function() {
-    Window_Selectable.prototype.update.call(this);
-    this.updateCancelButton();
-};
-
-Window_EventItem.prototype.updateCancelButton = function() {
-    if (this._cancelButton) {
-        this._cancelButton.visible = this.isOpen();
-    }
 };
 
 Window_EventItem.prototype.updatePlacement = function() {
@@ -56,22 +35,6 @@ Window_EventItem.prototype.updatePlacement = function() {
         this.y = 0;
     } else {
         this.y = Graphics.boxHeight - this.height;
-    }
-};
-
-Window_EventItem.prototype.placeCancelButton = function() {
-    if (this._cancelButton) {
-        const spacing = 8;
-        const button = this._cancelButton;
-        if (this.y === 0) {
-            button.y = this.height + spacing;
-        } else if (this._messageWindow.y >= Graphics.boxHeight / 4) {
-            const distance = this.y - this._messageWindow.y;
-            button.y = -button.height - spacing - distance;
-        } else {
-            button.y = -button.height - spacing;
-        }
-        button.x = this.width - button.width - spacing;
     }
 };
 

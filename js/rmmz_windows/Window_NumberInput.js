@@ -15,7 +15,6 @@ Window_NumberInput.prototype.initialize = function() {
     this._number = 0;
     this._maxDigits = 1;
     this.openness = 0;
-    this.createButtons();
     this.deactivate();
     this._canRepeat = false;
 };
@@ -29,7 +28,6 @@ Window_NumberInput.prototype.start = function() {
     this._number = $gameVariables.value($gameMessage.numInputVariableId());
     this._number = this._number.clamp(0, Math.pow(10, this._maxDigits) - 1);
     this.updatePlacement();
-    this.placeButtons();
     this.createContents();
     this.refresh();
     this.open();
@@ -52,16 +50,11 @@ Window_NumberInput.prototype.updatePlacement = function() {
 
 Window_NumberInput.prototype.windowWidth = function() {
     const totalItemWidth = this.maxCols() * this.itemWidth();
-    const totalButtonWidth = this.totalButtonWidth();
-    return Math.max(totalItemWidth, totalButtonWidth) + this.padding * 2;
+    return totalItemWidth + this.padding * 2;
 };
 
 Window_NumberInput.prototype.windowHeight = function() {
-    if (ConfigManager.touchUI) {
-        return this.fittingHeight(1) + this.buttonSpacing() + 48;
-    } else {
-        return this.fittingHeight(1);
-    }
+    return this.fittingHeight(1);
 };
 
 Window_NumberInput.prototype.maxCols = function() {
@@ -89,44 +82,6 @@ Window_NumberInput.prototype.isScrollEnabled = function() {
 
 Window_NumberInput.prototype.isHoverEnabled = function() {
     return false;
-};
-
-Window_NumberInput.prototype.createButtons = function() {
-    this._buttons = [];
-    if (ConfigManager.touchUI) {
-        for (const type of ["down", "up", "ok"]) {
-            const button = new Sprite_Button(type);
-            this._buttons.push(button);
-            this.addInnerChild(button);
-        }
-        this._buttons[0].setClickHandler(this.onButtonDown.bind(this));
-        this._buttons[1].setClickHandler(this.onButtonUp.bind(this));
-        this._buttons[2].setClickHandler(this.onButtonOk.bind(this));
-    }
-};
-
-Window_NumberInput.prototype.placeButtons = function() {
-    const sp = this.buttonSpacing();
-    const totalWidth = this.totalButtonWidth();
-    let x = (this.innerWidth - totalWidth) / 2;
-    for (const button of this._buttons) {
-        button.x = x;
-        button.y = this.buttonY();
-        x += button.width + sp;
-    }
-};
-
-Window_NumberInput.prototype.totalButtonWidth = function() {
-    const sp = this.buttonSpacing();
-    return this._buttons.reduce((r, button) => r + button.width + sp, -sp);
-};
-
-Window_NumberInput.prototype.buttonSpacing = function() {
-    return 8;
-};
-
-Window_NumberInput.prototype.buttonY = function() {
-    return this.itemHeight() + this.buttonSpacing();
 };
 
 Window_NumberInput.prototype.update = function() {
@@ -188,16 +143,3 @@ Window_NumberInput.prototype.drawItem = function(index) {
     this.resetTextColor();
     this.drawText(c, rect.x, rect.y, rect.width, align);
 };
-
-Window_NumberInput.prototype.onButtonUp = function() {
-    this.changeDigit(true);
-};
-
-Window_NumberInput.prototype.onButtonDown = function() {
-    this.changeDigit(false);
-};
-
-Window_NumberInput.prototype.onButtonOk = function() {
-    this.processOk();
-};
-
