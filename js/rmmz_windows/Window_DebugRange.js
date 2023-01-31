@@ -53,7 +53,7 @@ Window_DebugRange.prototype.isSwitchMode = function(index) {
 };
 
 Window_DebugRange.prototype.drawItem = function(index) {
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     const c = this.isSwitchMode(index) ? "S" : "V";
     const start = this.topId(index);
     const end = start + 9;

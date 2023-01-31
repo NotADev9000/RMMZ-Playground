@@ -31,7 +31,7 @@ Window_StatusEquip.prototype.itemHeight = function() {
 };
 
 Window_StatusEquip.prototype.drawItem = function(index) {
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     const equips = this._actor.equips();
     const item = equips[index];
     const slotName = this.actorSlotName(this._actor, index);

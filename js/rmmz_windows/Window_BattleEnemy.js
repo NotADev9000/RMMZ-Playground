@@ -37,7 +37,7 @@ Window_BattleEnemy.prototype.enemyIndex = function() {
 Window_BattleEnemy.prototype.drawItem = function(index) {
     this.resetTextColor();
     const name = this._enemies[index].name();
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     this.drawText(name, rect.x, rect.y, rect.width);
 };
 

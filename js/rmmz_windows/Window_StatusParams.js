@@ -31,7 +31,7 @@ Window_StatusParams.prototype.itemHeight = function() {
 };
 
 Window_StatusParams.prototype.drawItem = function(index) {
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     const paramId = index + 2;
     const name = TextManager.param(paramId);
     const value = this._actor.param(paramId);

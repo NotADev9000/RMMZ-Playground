@@ -35,7 +35,7 @@ Window_Options.prototype.addVolumeOptions = function() {
 Window_Options.prototype.drawItem = function(index) {
     const title = this.commandName(index);
     const status = this.statusText(index);
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     const statusWidth = this.statusWidth();
     const titleWidth = rect.width - statusWidth;
     this.resetTextColor();

@@ -20,7 +20,7 @@ Window_Gold.prototype.colSpacing = function() {
 };
 
 Window_Gold.prototype.refresh = function() {
-    const rect = this.itemLineRect(0);
+    const rect = this.itemRect(0);
     const x = rect.x;
     const y = rect.y;
     const width = rect.width;

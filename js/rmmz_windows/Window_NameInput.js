@@ -151,7 +151,7 @@ Window_NameInput.prototype.itemRect = function(index) {
 Window_NameInput.prototype.drawItem = function(index) {
     const table = this.table();
     const character = table[this._page][index];
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     this.drawText(character, rect.x, rect.y, rect.width, "center");
 };
 

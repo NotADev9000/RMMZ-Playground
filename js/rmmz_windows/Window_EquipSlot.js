@@ -47,7 +47,7 @@ Window_EquipSlot.prototype.drawItem = function(index) {
         const slotName = this.actorSlotName(this._actor, index);
         const item = this.itemAt(index);
         const slotNameWidth = this.slotNameWidth();
-        const rect = this.itemLineRect(index);
+        const rect = this.itemRect(index);
         const itemWidth = rect.width - slotNameWidth;
         this.changeTextColor(ColorManager.systemColor());
         this.changePaintOpacity(this.isEnabled(index));

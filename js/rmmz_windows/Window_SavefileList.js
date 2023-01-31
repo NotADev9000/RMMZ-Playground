@@ -38,7 +38,7 @@ Window_SavefileList.prototype.itemHeight = function() {
 Window_SavefileList.prototype.drawItem = function(index) {
     const savefileId = this.indexToSavefileId(index);
     const info = DataManager.savefileInfo(savefileId);
-    const rect = this.itemRectWithPadding(index);
+    const rect = this.itemRect(index);
     this.resetTextColor();
     this.changePaintOpacity(this.isEnabled(savefileId));
     this.drawTitle(savefileId, rect.x, rect.y + 4);

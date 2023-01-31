@@ -87,7 +87,7 @@ Window_BattleStatus.prototype.drawItemImage = function(index) {
 
 Window_BattleStatus.prototype.drawItemStatus = function(index) {
     const actor = this.actor(index);
-    const rect = this.itemRectWithPadding(index);
+    const rect = this.itemRect(index);
     const nameX = this.nameX(rect);
     const nameY = this.nameY(rect);
     const stateIconX = this.stateIconX(rect);

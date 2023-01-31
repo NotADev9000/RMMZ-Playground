@@ -31,9 +31,9 @@ Window_EquipStatus.prototype.colSpacing = function() {
 Window_EquipStatus.prototype.refresh = function() {
     this.contents.clear();
     if (this._actor) {
-        const nameRect = this.itemLineRect(0);
-        this.drawActorName(this._actor, nameRect.x, 0, nameRect.width);
-        this.drawActorFace(this._actor, nameRect.x, nameRect.height);
+        const rect = this.itemRect(0);
+        this.drawActorName(this._actor, rect.x, 0, rect.width);
+        this.drawActorFace(this._actor, rect.x, rect.height);
         this.drawAllParams();
     }
 };

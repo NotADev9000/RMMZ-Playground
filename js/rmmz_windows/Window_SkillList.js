@@ -82,7 +82,7 @@ Window_SkillList.prototype.drawItem = function(index) {
     const skill = this.itemAt(index);
     if (skill) {
         const costWidth = this.costWidth();
-        const rect = this.itemLineRect(index);
+        const rect = this.itemRect(index);
         this.changePaintOpacity(this.isEnabled(skill));
         this.drawItemName(skill, rect.x, rect.y, rect.width - costWidth);
         this.drawSkillCost(skill, rect.x, rect.y, rect.width);

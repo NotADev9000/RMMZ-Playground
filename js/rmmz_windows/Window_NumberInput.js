@@ -136,7 +136,7 @@ Window_NumberInput.prototype.processOk = function() {
 };
 
 Window_NumberInput.prototype.drawItem = function(index) {
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     const align = "center";
     const s = this._number.padZero(this._maxDigits);
     const c = s.slice(index, index + 1);

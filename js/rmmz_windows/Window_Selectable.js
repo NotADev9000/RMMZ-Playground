@@ -167,20 +167,8 @@ Window_Selectable.prototype.itemRect = function(index) {
     return new Rectangle(x, y, width, height);
 };
 
-// TODO: remove & change all references to 'itemRect'
-Window_Selectable.prototype.itemRectWithPadding = function(index) {
+Window_Selectable.prototype.itemRectForCursor = function(index) {
     const rect = this.itemRect(index);
-    return rect;
-};
-
-// TODO: remove & change all references to 'itemRect'
-Window_Selectable.prototype.itemLineRect = function(index) {
-    const rect = this.itemRectWithPadding(index);
-    return rect;
-};
-
-Window_Selectable.prototype.itemRectWithCursor = function(index) {
-    const rect = this.itemRectWithPadding(index);
     const cursorFit = this.cursorFitting();
     rect.height += cursorFit;
     rect.y -= cursorFit / 2; // move cursor up so it wraps around the item
@@ -585,7 +573,7 @@ Window_Selectable.prototype.refreshCursor = function() {
     if (this._cursorAll) {
         this.refreshCursorForAll();
     } else if (this.index() >= 0) {
-        const rect = this.itemRectWithCursor(this.index());
+        const rect = this.itemRectForCursor(this.index());
         this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
     } else {
         this.setCursorRect(0, 0, 0, 0);

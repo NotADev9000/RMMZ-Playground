@@ -28,7 +28,7 @@ Window_DebugEdit.prototype.drawItem = function(index) {
     const statusWidth = this.textWidth("-00000000");
     const name = this.itemName(dataId);
     const status = this.itemStatus(dataId);
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     this.resetTextColor();
     this.drawText(idText, rect.x, rect.y, rect.width);
     rect.x += idWidth;

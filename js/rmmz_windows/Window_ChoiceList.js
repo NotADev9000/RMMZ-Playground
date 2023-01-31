@@ -116,7 +116,7 @@ Window_ChoiceList.prototype.makeCommandList = function() {
 };
 
 Window_ChoiceList.prototype.drawItem = function(index) {
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     this.drawTextEx(this.commandName(index), rect.x, rect.y, rect.width);
 };
 

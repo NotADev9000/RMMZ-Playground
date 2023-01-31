@@ -91,7 +91,7 @@ Window_ItemList.prototype.drawItem = function(index) {
     const item = this.itemAt(index);
     if (item) {
         const numberWidth = this.numberWidth();
-        const rect = this.itemLineRect(index);
+        const rect = this.itemRect(index);
         this.changePaintOpacity(this.isEnabled(item));
         this.drawItemName(item, rect.x, rect.y, rect.width - numberWidth);
         this.drawItemNumber(item, rect.x, rect.y, rect.width);

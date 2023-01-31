@@ -91,7 +91,7 @@ Window_Command.prototype.selectExt = function(ext) {
 };
 
 Window_Command.prototype.drawItem = function(index) {
-    const rect = this.itemLineRect(index);
+    const rect = this.itemRect(index);
     const align = this.itemTextAlign();
     this.resetTextColor();
     this.changePaintOpacity(this.isCommandEnabled(index));
