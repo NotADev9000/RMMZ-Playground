@@ -82,7 +82,7 @@ Window_Message.prototype.updateBackOpacity = function() {
     this.backOpacity = 192;
 };
 
-Window_Message.prototype.standardPadding = function() {
+Window_Message.prototype.framePadding = function() {
     return 15;
 };
 

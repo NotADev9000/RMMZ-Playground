@@ -40,8 +40,3 @@ Window_StatusEquip.prototype.drawItem = function(index) {
     this.drawText(slotName, rect.x, rect.y, sw, rect.height);
     this.drawItemName(item, rect.x + sw, rect.y, rect.width - sw);
 };
-
-Window_StatusEquip.prototype.drawItemBackground = function(/*index*/) {
-    //
-};
-

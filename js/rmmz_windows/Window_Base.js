@@ -44,15 +44,19 @@ Window_Base.prototype.lineHeight = function() {
 };
 
 Window_Base.prototype.lineSpacing = function() {
-    return 4;
+    return 6;
 };
 
 Window_Base.prototype.itemWidth = function() {
-    return this.innerWidth;
+    return this.innerWidth - (this.contentPadding() * 2);
 };
 
 Window_Base.prototype.itemHeight = function() {
-    return this.lineHeight() + this.lineSpacing();
+    return this.lineHeight();
+};
+
+Window_Base.prototype.itemHeightSpaced = function() {
+    return this.itemHeight() + this.lineSpacing();
 };
 
 Window_Base.prototype.itemPadding = function() {
@@ -69,22 +73,33 @@ Window_Base.prototype.loadWindowskin = function() {
     this.windowskin = ImageManager.loadSystem("Window");
 };
 
-Window_Base.prototype.standardPadding = function() {
-    return $gameSystem.windowPadding();
+Window_Base.prototype.framePadding = function() {
+    return $gameSystem.framePadding();
+};
+
+Window_Base.prototype.contentPadding = function() {
+    return $gameSystem.contentPadding();
+};
+
+Window_Base.prototype.allPadding = function() {
+    return this.framePadding() + this.contentPadding();
 };
 
 Window_Base.prototype.updatePadding = function() {
-    this.padding = this.standardPadding();
+    this.padding = this.framePadding();
 };
 
 Window_Base.prototype.updateBackOpacity = function() {
     this.backOpacity = $gameSystem.windowOpacity();
 };
 
+/**
+ * used when initializing window to calculate its height
+ */
 Window_Base.prototype.fittingHeight = function(numLines) {
-    const padding = this.standardPadding() * 2;
-    const allItemsHeight = numLines * this.itemHeight();
-    return (allItemsHeight + padding) - this.lineSpacing();
+    const padding = this.allPadding() * 2;
+    const allItemsHeight = (numLines * this.itemHeightSpaced()) - this.lineSpacing();
+    return allItemsHeight + padding;
 };
 
 Window_Base.prototype.updateTone = function() {
@@ -214,6 +229,7 @@ Window_Base.prototype.changePaintOpacity = function(enabled) {
 };
 
 Window_Base.prototype.drawRect = function(x, y, width, height) {
+    x += this.contentPadding(); y += this.contentPadding();
     const outlineColor = this.contents.outlineColor;
     const mainColor = this.contents.textColor;
     this.contents.fillRect(x, y, width, height, outlineColor);
@@ -221,6 +237,7 @@ Window_Base.prototype.drawRect = function(x, y, width, height) {
 };
 
 Window_Base.prototype.drawText = function(text, x, y, maxWidth, align) {
+    x += this.contentPadding(); y += this.contentPadding();
     this.contents.drawText(text, x, y, maxWidth, this.lineHeight(), align);
 };
 
@@ -244,6 +261,7 @@ Window_Base.prototype.textSizeEx = function(text) {
 };
 
 Window_Base.prototype.createTextState = function(text, x, y, width) {
+    x += this.contentPadding(); y += this.contentPadding();
     const rtl = Utils.containsArabic(text);
     const textState = {};
     textState.text = this.convertEscapeCharacters(text);
@@ -447,6 +465,7 @@ Window_Base.prototype.maxFontSizeInLine = function(line) {
 };
 
 Window_Base.prototype.drawIcon = function(iconIndex, x, y) {
+    x += this.contentPadding(); y += this.contentPadding();
     const bitmap = ImageManager.loadSystem("IconSet");
     const pw = ImageManager.iconWidth;
     const ph = ImageManager.iconHeight;
@@ -459,6 +478,7 @@ Window_Base.prototype.drawIcon = function(iconIndex, x, y) {
 Window_Base.prototype.drawFace = function(
     faceName, faceIndex, x, y, width, height
 ) {
+    x += this.contentPadding(); y += this.contentPadding();
     width = width || ImageManager.faceWidth;
     height = height || ImageManager.faceHeight;
     const bitmap = ImageManager.loadFace(faceName);
@@ -477,6 +497,7 @@ Window_Base.prototype.drawFace = function(
 Window_Base.prototype.drawCharacter = function(
     characterName, characterIndex, x, y
 ) {
+    x += this.contentPadding(); y += this.contentPadding();
     const bitmap = ImageManager.loadCharacter(characterName);
     const big = ImageManager.isBigCharacter(characterName);
     const pw = bitmap.width / (big ? 3 : 12);

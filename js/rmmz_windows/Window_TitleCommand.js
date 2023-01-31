@@ -22,6 +22,10 @@ Window_TitleCommand.initCommandPosition = function() {
     this._lastCommandSymbol = null;
 };
 
+Window_TitleCommand.defaultWidth = function() {
+    return 240;
+};
+
 Window_TitleCommand.prototype.makeCommandList = function() {
     const continueEnabled = this.isContinueEnabled();
     this.addCommand(TextManager.newGame, "newGame");

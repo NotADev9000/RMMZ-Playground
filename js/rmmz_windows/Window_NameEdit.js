@@ -29,6 +29,13 @@ Window_NameEdit.prototype.setup = function(actor, maxLength) {
     ImageManager.loadFace(actor.faceName());
 };
 
+Window_NameEdit.prototype.fittingHeight = function(numPics) {
+    const padding = this.allPadding() * 2;
+    const picHeightSpaced = ImageManager.faceHeight + this.lineSpacing();
+    const allItemsHeight = (numPics * picHeightSpaced) - this.lineSpacing();
+    return allItemsHeight + padding;
+};
+
 Window_NameEdit.prototype.name = function() {
     return this._name;
 };

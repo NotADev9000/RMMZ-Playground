@@ -51,21 +51,21 @@ Window_Selectable.prototype.maxItems = function() {
 };
 
 Window_Selectable.prototype.colSpacing = function() {
-    return 8;
+    return 0;
 };
 
 Window_Selectable.prototype.rowSpacing = function() {
-    return 4;
+    return 0;
 };
 
 Window_Selectable.prototype.itemWidth = function() {
-    return Math.floor(this.innerWidth / this.maxCols());
+    const contentWidth = this.innerWidth - (this.contentPadding() * 2);
+    return Math.floor(contentWidth / this.maxCols());
 };
 
-Window_Selectable.prototype.itemHeight = function() {
-    return Window_Scrollable.prototype.itemHeight.call(this) + 8;
-};
-
+/**
+ * item height added so overflow of last item can be seen
+ */
 Window_Selectable.prototype.contentsHeight = function() {
     return this.innerHeight + this.itemHeight();
 };
@@ -75,7 +75,7 @@ Window_Selectable.prototype.maxRows = function() {
 };
 
 Window_Selectable.prototype.overallHeight = function() {
-    return this.maxRows() * this.itemHeight();
+    return this.maxRows() * (this.itemHeightSpaced() - this.lineSpacing());
 };
 
 Window_Selectable.prototype.activate = function() {
@@ -119,7 +119,7 @@ Window_Selectable.prototype.row = function() {
 };
 
 Window_Selectable.prototype.topRow = function() {
-    return Math.floor(this.scrollY() / this.itemHeight());
+    return Math.floor(this.scrollY() / this.itemHeightSpaced());
 };
 
 Window_Selectable.prototype.maxTopRow = function() {
@@ -127,11 +127,11 @@ Window_Selectable.prototype.maxTopRow = function() {
 };
 
 Window_Selectable.prototype.setTopRow = function(row) {
-    this.scrollTo(this.scrollX(), row * this.itemHeight());
+    this.scrollTo(this.scrollX(), row * this.itemHeightSpaced());
 };
 
 Window_Selectable.prototype.maxPageRows = function() {
-    return Math.floor(this.innerHeight / this.itemHeight());
+    return Math.floor((this.innerHeight + this.lineSpacing()) / this.itemHeightSpaced());
 };
 
 Window_Selectable.prototype.maxPageItems = function() {
@@ -139,7 +139,7 @@ Window_Selectable.prototype.maxPageItems = function() {
 };
 
 Window_Selectable.prototype.maxVisibleItems = function() {
-    const visibleRows = Math.ceil(this.contentsHeight() / this.itemHeight());
+    const visibleRows = Math.ceil(this.contentsHeight() / this.itemHeightSpaced());
     return visibleRows * this.maxCols();
 };
 
@@ -154,31 +154,36 @@ Window_Selectable.prototype.topIndex = function() {
 Window_Selectable.prototype.itemRect = function(index) {
     const maxCols = this.maxCols();
     const itemWidth = this.itemWidth();
-    const itemHeight = this.itemHeight();
+    const itemHeight = this.itemHeight()
+    const itemHeightSpaced = this.itemHeightSpaced();
     const colSpacing = this.colSpacing();
     const rowSpacing = this.rowSpacing();
     const col = index % maxCols;
     const row = Math.floor(index / maxCols);
     const x = col * itemWidth + colSpacing / 2 - this.scrollBaseX();
-    const y = row * itemHeight + rowSpacing / 2 - this.scrollBaseY();
+    const y = row * itemHeightSpaced + rowSpacing / 2 - this.scrollBaseY();
     const width = itemWidth - colSpacing;
     const height = itemHeight - rowSpacing;
     return new Rectangle(x, y, width, height);
 };
 
+// TODO: remove & change all references to 'itemRect'
 Window_Selectable.prototype.itemRectWithPadding = function(index) {
     const rect = this.itemRect(index);
-    const padding = this.itemPadding();
-    rect.x += padding;
-    rect.width -= padding * 2;
     return rect;
 };
 
+// TODO: remove & change all references to 'itemRect'
 Window_Selectable.prototype.itemLineRect = function(index) {
     const rect = this.itemRectWithPadding(index);
-    const padding = (rect.height - this.lineHeight()) / 2;
-    rect.y += padding;
-    rect.height -= padding * 2;
+    return rect;
+};
+
+Window_Selectable.prototype.itemRectWithCursor = function(index) {
+    const rect = this.itemRectWithPadding(index);
+    const cursorFit = this.cursorFitting();
+    rect.height += cursorFit;
+    rect.y -= cursorFit / 2; // move cursor up so it wraps around the item
     return rect;
 };
 
@@ -531,7 +536,6 @@ Window_Selectable.prototype.drawAllItems = function() {
     for (let i = 0; i < this.maxVisibleItems(); i++) {
         const index = topIndex + i;
         if (index < this.maxItems()) {
-            this.drawItemBackground(index);
             this.drawItem(index);
         }
     }
@@ -547,26 +551,9 @@ Window_Selectable.prototype.clearItem = function(index) {
     this.contentsBack.clearRect(rect.x, rect.y, rect.width, rect.height);
 };
 
-Window_Selectable.prototype.drawItemBackground = function(index) {
-    const rect = this.itemRect(index);
-    this.drawBackgroundRect(rect);
-};
-
-Window_Selectable.prototype.drawBackgroundRect = function(rect) {
-    const c1 = ColorManager.itemBackColor1();
-    const c2 = ColorManager.itemBackColor2();
-    const x = rect.x;
-    const y = rect.y;
-    const w = rect.width;
-    const h = rect.height;
-    this.contentsBack.gradientFillRect(x, y, w, h, c1, c2, true);
-    this.contentsBack.strokeRect(x, y, w, h, c1);
-};
-
 Window_Selectable.prototype.redrawItem = function(index) {
     if (index >= 0) {
         this.clearItem(index);
-        this.drawItemBackground(index);
         this.drawItem(index);
     }
 };
@@ -587,11 +574,18 @@ Window_Selectable.prototype.paint = function() {
     }
 };
 
+/**
+ * height to add cursor to fit it around window item.
+ */
+Window_Selectable.prototype.cursorFitting = function() {
+    return 6;
+};
+
 Window_Selectable.prototype.refreshCursor = function() {
     if (this._cursorAll) {
         this.refreshCursorForAll();
     } else if (this.index() >= 0) {
-        const rect = this.itemRect(this.index());
+        const rect = this.itemRectWithCursor(this.index());
         this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
     } else {
         this.setCursorRect(0, 0, 0, 0);

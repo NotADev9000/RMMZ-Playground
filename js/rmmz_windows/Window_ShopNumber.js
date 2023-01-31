@@ -45,7 +45,6 @@ Window_ShopNumber.prototype.setCurrencyUnit = function(currencyUnit) {
 
 Window_ShopNumber.prototype.refresh = function() {
     Window_Selectable.prototype.refresh.call(this);
-    this.drawItemBackground(0);
     this.drawCurrentItemName();
     this.drawMultiplicationSign();
     this.drawNumber();

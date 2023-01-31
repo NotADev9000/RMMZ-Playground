@@ -40,8 +40,3 @@ Window_StatusParams.prototype.drawItem = function(index) {
     this.resetTextColor();
     this.drawText(value, rect.x + 160, rect.y, 60, "right");
 };
-
-Window_StatusParams.prototype.drawItemBackground = function(/*index*/) {
-    //
-};
-

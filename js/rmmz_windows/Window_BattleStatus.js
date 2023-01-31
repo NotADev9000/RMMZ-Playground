@@ -38,7 +38,7 @@ Window_BattleStatus.prototype.rowSpacing = function() {
     return 0;
 };
 
-Window_BattleStatus.prototype.standardPadding = function() {
+Window_BattleStatus.prototype.framePadding = function() {
     return 8;
 };
 

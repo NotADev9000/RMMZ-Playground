@@ -238,8 +238,12 @@ Game_System.prototype.mainFontSize = function() {
     return $dataSystem.advanced.fontSize;
 };
 
-Game_System.prototype.windowPadding = function() {
-    return 12;
+Game_System.prototype.framePadding = function() {
+    return 3;
+};
+
+Game_System.prototype.contentPadding = function() {
+    return 8;
 };
 
 Game_System.prototype.windowOpacity = function() {
