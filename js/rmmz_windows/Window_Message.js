@@ -30,6 +30,10 @@ Window_Message.prototype.initMembers = function() {
     this.clearFlags();
 };
 
+Window_Message.defaultWidth = function() {
+    return Graphics.boxWidth - 8;
+};
+
 Window_Message.prototype.setGoldWindow = function(goldWindow) {
     this._goldWindow = goldWindow;
 };
@@ -82,6 +86,10 @@ Window_Message.prototype.updateBackOpacity = function() {
     this.backOpacity = 192;
 };
 
+Window_Message.prototype.verticalMargin = function() {
+    return 4;
+};
+
 Window_Message.prototype.checkToNotClose = function() {
     if (this.isOpen() && this.isClosing() && this.doesContinue()) {
         this.open();
@@ -99,7 +107,7 @@ Window_Message.prototype.canStart = function() {
 Window_Message.prototype.startMessage = function() {
     const text = $gameMessage.allText();
     const textState = this.createTextState(text, 0, 0, 0);
-    textState.x = this.newLineX(textState);
+    textState.x += this.newLineX(textState);
     textState.startX = textState.x;
     this._textState = textState;
     this.newPage(this._textState);
@@ -114,13 +122,13 @@ Window_Message.prototype.newLineX = function(textState) {
     const faceWidth = ImageManager.faceWidth;
     const spacing = 20;
     const margin = faceExists ? faceWidth + spacing : 0;
-    return textState.rtl ? this.innerWidth - margin : margin;
+    return textState.rtl ? this.centerWidth() - margin : margin;
 };
 
 Window_Message.prototype.updatePlacement = function() {
     const goldWindow = this._goldWindow;
     this._positionType = $gameMessage.positionType();
-    this.y = (this._positionType * (Graphics.boxHeight - this.height)) / 2;
+    this.y = (this._positionType * (Graphics.boxHeight - this.height - this.verticalMargin())) / 2;
     if (goldWindow) {
         goldWindow.y = this.y > 0 ? 0 : Graphics.boxHeight - goldWindow.height;
     }
@@ -296,7 +304,7 @@ Window_Message.prototype.newPage = function(textState) {
     this.updateSpeakerName();
     this.loadMessageFace();
     textState.x = textState.startX;
-    textState.y = 0;
+    textState.y = textState.startY;
     textState.height = this.calcTextHeight(textState);
 };
 

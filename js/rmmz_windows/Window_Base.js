@@ -48,7 +48,7 @@ Window_Base.prototype.lineSpacing = function() {
 };
 
 Window_Base.prototype.itemWidth = function() {
-    return this.innerWidth - (this.positionPaddingX() * 2);
+    return this.centerWidth();
 };
 
 Window_Base.prototype.itemHeight = function() {
@@ -135,6 +135,14 @@ Window_Base.prototype.contentsWidth = function() {
 
 Window_Base.prototype.contentsHeight = function() {
     return this.innerHeight;
+};
+
+Window_Base.prototype.centerWidth = function() {
+    return this.innerWidth - (this.positionPaddingX() * 2);
+};
+
+Window_Base.prototype.centerHeight = function() {
+    return this.innerHeight - (this.positionPaddingY() * 2);
 };
 
 Window_Base.prototype.resetFontSettings = function() {

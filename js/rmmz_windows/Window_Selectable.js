@@ -59,8 +59,7 @@ Window_Selectable.prototype.rowSpacing = function() {
 };
 
 Window_Selectable.prototype.itemWidth = function() {
-    const contentWidth = this.innerWidth - (this.positionPaddingX() * 2);
-    return Math.floor(contentWidth / this.maxCols());
+    return Math.floor(this.centerWidth() / this.maxCols());
 };
 
 /**
@@ -72,10 +71,6 @@ Window_Selectable.prototype.contentsHeight = function() {
 
 Window_Selectable.prototype.maxRows = function() {
     return Math.max(Math.ceil(this.maxItems() / this.maxCols()), 1);
-};
-
-Window_Selectable.prototype.overallHeight = function() {
-    return this.maxRows() * (this.itemHeightSpaced() - this.lineSpacing());
 };
 
 Window_Selectable.prototype.activate = function() {

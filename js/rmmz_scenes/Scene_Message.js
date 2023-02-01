@@ -36,7 +36,7 @@ Scene_Message.prototype.createMessageWindow = function() {
 };
 
 Scene_Message.prototype.messageWindowRect = function() {
-    const ww = Graphics.boxWidth;
+    const ww = Window_Message.defaultWidth();
     const wh = this.calcWindowHeight(4, Window_Message);
     const wx = (Graphics.boxWidth - ww) / 2;
     const wy = 0;

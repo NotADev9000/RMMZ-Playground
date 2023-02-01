@@ -85,7 +85,12 @@ Window_Scrollable.prototype.overallWidth = function() {
 };
 
 Window_Scrollable.prototype.overallHeight = function() {
-    return this.innerHeight;
+    return this.maxRows() * this.itemHeightSpaced();
+};
+
+Window_Scrollable.prototype.maxRows = function() {
+    // to be overridden
+    console.warn("Window_Scrollable.prototype.maxRows should be overridden!");
 };
 
 Window_Scrollable.prototype.maxScrollX = function() {
@@ -242,5 +247,6 @@ Window_Scrollable.prototype.updateScrollBase = function(baseX, baseY) {
 
 Window_Scrollable.prototype.paint = function() {
     // to be overridden
+    console.warn("Window_Scrollable.prototype.paint should be overridden!");
 };
 
