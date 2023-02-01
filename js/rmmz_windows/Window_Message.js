@@ -82,10 +82,6 @@ Window_Message.prototype.updateBackOpacity = function() {
     this.backOpacity = 192;
 };
 
-Window_Message.prototype.framePadding = function() {
-    return 15;
-};
-
 Window_Message.prototype.checkToNotClose = function() {
     if (this.isOpen() && this.isClosing() && this.doesContinue()) {
         this.open();

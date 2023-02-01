@@ -391,7 +391,7 @@ Window.prototype.isClosed = function() {
  * @param {number} height - The height of the cursor.
  */
 Window.prototype.setCursorRect = function(x, y, width, height) {
-    x += this.contentPaddingX(); y += this.contentPaddingY();
+    x += this.positionPaddingX(); y += this.positionPaddingY();
     const cw = Math.floor(width || 0);
     const ch = Math.floor(height || 0);
     this._cursorRect.x = Math.floor(x || 0);

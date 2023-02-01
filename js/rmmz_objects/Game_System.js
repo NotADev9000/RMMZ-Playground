@@ -242,11 +242,11 @@ Game_System.prototype.framePadding = function() {
     return 3;
 };
 
-Game_System.prototype.contentPaddingX = function() {
+Game_System.prototype.positionPaddingX = function() {
     return 8;
 };
 
-Game_System.prototype.contentPaddingY = function() {
+Game_System.prototype.positionPaddingY = function() {
     return 8;
 };
 

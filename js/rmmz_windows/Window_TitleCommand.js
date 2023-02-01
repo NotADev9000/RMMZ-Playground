@@ -30,7 +30,7 @@ Window_TitleCommand.prototype.updateBackOpacity = function() {
     this.backOpacity = 192;
 };
 
-Window_TitleCommand.prototype.contentPaddingX = function() {
+Window_TitleCommand.prototype.positionPaddingX = function() {
     return 5;
 };
 

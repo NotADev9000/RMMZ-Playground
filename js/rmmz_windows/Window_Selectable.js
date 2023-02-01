@@ -59,7 +59,7 @@ Window_Selectable.prototype.rowSpacing = function() {
 };
 
 Window_Selectable.prototype.itemWidth = function() {
-    const contentWidth = this.innerWidth - (this.contentPaddingX() * 2);
+    const contentWidth = this.innerWidth - (this.positionPaddingX() * 2);
     return Math.floor(contentWidth / this.maxCols());
 };
 
