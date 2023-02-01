@@ -59,7 +59,7 @@ Window_Selectable.prototype.rowSpacing = function() {
 };
 
 Window_Selectable.prototype.itemWidth = function() {
-    const contentWidth = this.innerWidth - (this.contentPadding() * 2);
+    const contentWidth = this.innerWidth - (this.contentPaddingX() * 2);
     return Math.floor(contentWidth / this.maxCols());
 };
 
@@ -169,9 +169,12 @@ Window_Selectable.prototype.itemRect = function(index) {
 
 Window_Selectable.prototype.itemRectForCursor = function(index) {
     const rect = this.itemRect(index);
-    const cursorFit = this.cursorFitting();
-    rect.height += cursorFit;
-    rect.y -= cursorFit / 2; // move cursor up so it wraps around the item
+    const cursorFitX = this.cursorFittingX();
+    const cursorFitY = this.cursorFittingY();
+    rect.width += cursorFitX;
+    rect.x -= cursorFitX / 2; // move cursor left to wrap item
+    rect.height += cursorFitY;
+    rect.y -= cursorFitY / 2; // move cursor up to wrap item
     return rect;
 };
 
@@ -563,9 +566,16 @@ Window_Selectable.prototype.paint = function() {
 };
 
 /**
+ * width to add cursor to fit it around window item.
+ */
+Window_Selectable.prototype.cursorFittingX = function() {
+    return 8;
+};
+
+/**
  * height to add cursor to fit it around window item.
  */
-Window_Selectable.prototype.cursorFitting = function() {
+Window_Selectable.prototype.cursorFittingY = function() {
     return 6;
 };
 

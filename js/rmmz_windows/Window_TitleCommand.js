@@ -23,7 +23,15 @@ Window_TitleCommand.initCommandPosition = function() {
 };
 
 Window_TitleCommand.defaultWidth = function() {
-    return 240;
+    return 64;
+};
+
+Window_TitleCommand.prototype.updateBackOpacity = function() {
+    this.backOpacity = 192;
+};
+
+Window_TitleCommand.prototype.contentPaddingX = function() {
+    return 5;
 };
 
 Window_TitleCommand.prototype.makeCommandList = function() {

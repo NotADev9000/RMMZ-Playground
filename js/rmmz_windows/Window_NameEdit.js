@@ -30,7 +30,7 @@ Window_NameEdit.prototype.setup = function(actor, maxLength) {
 };
 
 Window_NameEdit.prototype.fittingHeight = function(numPics) {
-    const padding = this.allPadding() * 2;
+    const padding = this.allPaddingY() * 2;
     const picHeightSpaced = ImageManager.faceHeight + this.lineSpacing();
     const allItemsHeight = (numPics * picHeightSpaced) - this.lineSpacing();
     return allItemsHeight + padding;
