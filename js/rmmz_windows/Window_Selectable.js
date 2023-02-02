@@ -533,6 +533,7 @@ Window_Selectable.prototype.drawItem = function(/*index*/) {
 
 Window_Selectable.prototype.clearItem = function(index) {
     const rect = this.itemRect(index);
+    rect.x += this.positionPaddingX(); rect.y += this.positionPaddingY();
     this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
     this.contentsBack.clearRect(rect.x, rect.y, rect.width, rect.height);
 };
