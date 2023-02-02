@@ -94,7 +94,7 @@ Window_Base.prototype.drawText = function(text, x, y, maxWidth, align) {
 
 <br>
 
-## Text Display:
+## Text Sizing:
 ---
 Values related to the layout of text.
 
@@ -140,7 +140,7 @@ textState.height = this.calcTextHeight(textState);
 
 <br>
 
-## Item Display:
+## Item Sizing:
 ---
 Values related to the layout of items.
 
