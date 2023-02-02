@@ -59,7 +59,15 @@ Window_Selectable.prototype.rowSpacing = function() {
 };
 
 Window_Selectable.prototype.itemWidth = function() {
-    return Math.floor(this.centerWidth() / this.maxCols());
+    const cols = this.maxCols();
+    const centerWidth = this.centerWidth();
+    if (cols <= 1) return centerWidth;
+    // width of all spaces inbetween items in window
+    const allColSpacing = this.colSpacing() * (cols - 1);
+    // width of all items in window (not including column spaces)
+    const allItemsWidth = centerWidth - allColSpacing;
+    // returns width of single item
+    return Math.floor(allItemsWidth / cols);
 };
 
 /**
