@@ -22,41 +22,22 @@ Window_Selectable.prototype.initialize = function(rect) {
     this.deactivate();
 };
 
-Window_Selectable.prototype.index = function() {
-    return this._index;
+//------------------
+// #region Content Sizing
+//------------------
+
+/**
+ * item height added so overflow of last item can be seen
+ */
+Window_Selectable.prototype.contentsHeight = function() {
+    return this.innerHeight + this.itemHeight();
 };
 
-Window_Selectable.prototype.cursorFixed = function() {
-    return this._cursorFixed;
-};
+// #endregion
 
-Window_Selectable.prototype.setCursorFixed = function(cursorFixed) {
-    this._cursorFixed = cursorFixed;
-};
-
-Window_Selectable.prototype.cursorAll = function() {
-    return this._cursorAll;
-};
-
-Window_Selectable.prototype.setCursorAll = function(cursorAll) {
-    this._cursorAll = cursorAll;
-};
-
-Window_Selectable.prototype.maxCols = function() {
-    return 1;
-};
-
-Window_Selectable.prototype.maxItems = function() {
-    return 0;
-};
-
-Window_Selectable.prototype.colSpacing = function() {
-    return 0;
-};
-
-Window_Selectable.prototype.rowSpacing = function() {
-    return 0;
-};
+//------------------
+// #region Item Sizing
+//------------------
 
 Window_Selectable.prototype.itemWidth = function() {
     const cols = this.maxCols();
@@ -70,51 +51,46 @@ Window_Selectable.prototype.itemWidth = function() {
     return Math.floor(allItemsWidth / cols);
 };
 
+// #endregion
+
+//------------------
+// #region Cursor Sizing
+//------------------
+
 /**
- * item height added so overflow of last item can be seen
+ * width to add cursor to fit it around window item.
  */
-Window_Selectable.prototype.contentsHeight = function() {
-    return this.innerHeight + this.itemHeight();
+Window_Selectable.prototype.cursorFittingX = function() {
+    return 8;
 };
+
+/**
+ * height to add cursor to fit it around window item.
+ */
+Window_Selectable.prototype.cursorFittingY = function() {
+    return 6;
+};
+
+// #endregion
+
+//------------------
+// #region Content Layout
+//------------------
 
 Window_Selectable.prototype.maxRows = function() {
     return Math.max(Math.ceil(this.maxItems() / this.maxCols()), 1);
 };
 
-Window_Selectable.prototype.activate = function() {
-    Window_Scrollable.prototype.activate.call(this);
-    this.reselect();
+Window_Selectable.prototype.maxCols = function() {
+    return 1;
 };
 
-Window_Selectable.prototype.deactivate = function() {
-    Window_Scrollable.prototype.deactivate.call(this);
-    this.reselect();
+Window_Selectable.prototype.rowSpacing = function() {
+    return 0;
 };
 
-Window_Selectable.prototype.select = function(index) {
-    this._index = index;
-    this.refreshCursor();
-    this.callUpdateHelp();
-};
-
-Window_Selectable.prototype.forceSelect = function(index) {
-    this.select(index);
-    this.ensureCursorVisible(false);
-};
-
-Window_Selectable.prototype.smoothSelect = function(index) {
-    this.select(index);
-    this.ensureCursorVisible(true);
-};
-
-Window_Selectable.prototype.deselect = function() {
-    this.select(-1);
-};
-
-Window_Selectable.prototype.reselect = function() {
-    this.select(this._index);
-    this.ensureCursorVisible(true);
-    this.cursorVisible = true;
+Window_Selectable.prototype.colSpacing = function() {
+    return 0;
 };
 
 Window_Selectable.prototype.row = function() {
@@ -154,6 +130,12 @@ Window_Selectable.prototype.topIndex = function() {
     return this.topRow() * this.maxCols();
 };
 
+// #endregion
+
+//------------------
+// #region Item Layout
+//------------------
+
 Window_Selectable.prototype.itemRect = function(index) {
     const maxCols = this.maxCols();
     const itemWidth = this.itemWidth();
@@ -170,6 +152,12 @@ Window_Selectable.prototype.itemRect = function(index) {
     return new Rectangle(x, y, width, height);
 };
 
+// #endregion
+
+//------------------
+// #region Cursor Layout
+//------------------
+
 Window_Selectable.prototype.itemRectForCursor = function(index) {
     const rect = this.itemRect(index);
     const cursorFitX = this.cursorFittingX();
@@ -181,22 +169,139 @@ Window_Selectable.prototype.itemRectForCursor = function(index) {
     return rect;
 };
 
-Window_Selectable.prototype.setHelpWindow = function(helpWindow) {
-    this._helpWindow = helpWindow;
-    this.callUpdateHelp();
-};
-
-Window_Selectable.prototype.showHelpWindow = function() {
-    if (this._helpWindow) {
-        this._helpWindow.show();
+Window_Selectable.prototype.refreshCursor = function() {
+    if (this._cursorAll) {
+        this.refreshCursorForAll();
+    } else if (this.index() >= 0) {
+        const rect = this.itemRectForCursor(this.index());
+        this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
+    } else {
+        this.setCursorRect(0, 0, 0, 0);
     }
 };
 
-Window_Selectable.prototype.hideHelpWindow = function() {
-    if (this._helpWindow) {
-        this._helpWindow.hide();
+Window_Selectable.prototype.refreshCursorForAll = function() {
+    const maxItems = this.maxItems();
+    if (maxItems > 0) {
+        const rect = this.itemRect(0);
+        rect.enlarge(this.itemRect(maxItems - 1));
+        this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
+    } else {
+        this.setCursorRect(0, 0, 0, 0);
     }
 };
+
+// #endregion
+
+//------------------
+// #region Draw - Items
+//------------------
+
+Window_Selectable.prototype.drawAllItems = function() {
+    const topIndex = this.topIndex();
+    for (let i = 0; i < this.maxVisibleItems(); i++) {
+        const index = topIndex + i;
+        if (index < this.maxItems()) {
+            this.drawItem(index);
+        }
+    }
+};
+
+Window_Selectable.prototype.drawItem = function(/*index*/) {
+    //
+};
+
+Window_Selectable.prototype.clearItem = function(index) {
+    const rect = this.itemRect(index);
+    rect.x += this.positionPaddingX(); rect.y += this.positionPaddingY();
+    this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
+    this.contentsBack.clearRect(rect.x, rect.y, rect.width, rect.height);
+};
+
+Window_Selectable.prototype.redrawItem = function(index) {
+    if (index >= 0) {
+        this.clearItem(index);
+        this.drawItem(index);
+    }
+};
+
+Window_Selectable.prototype.redrawCurrentItem = function() {
+    this.redrawItem(this.index());
+};
+
+Window_Selectable.prototype.paint = function() {
+    if (this.contents) {
+        this.contents.clear();
+        this.contentsBack.clear();
+        this.drawAllItems();
+    }
+};
+
+// #endregion
+
+//------------------
+// #region Data - Items
+//------------------
+
+Window_Selectable.prototype.maxItems = function() {
+    return 0;
+};
+
+Window_Selectable.prototype.isCurrentItemEnabled = function() {
+    return true;
+};
+
+// #endregion
+
+//------------------
+// #region Input - Queries
+//------------------
+
+Window_Selectable.prototype.isCursorMovable = function() {
+    return (
+        this.isOpenAndActive() &&
+        !this._cursorFixed &&
+        !this._cursorAll &&
+        this.maxItems() > 0
+    );
+};
+
+Window_Selectable.prototype.isScrollEnabled = function() {
+    return this.active || this.index() < 0;
+};
+
+Window_Selectable.prototype.isHoverEnabled = function() {
+    return true;
+};
+
+Window_Selectable.prototype.isTouchOkEnabled = function() {
+    return (
+        this.isOkEnabled() &&
+        (this._cursorFixed || this._cursorAll || this._doubleTouch)
+    );
+};
+
+Window_Selectable.prototype.isOkEnabled = function() {
+    return this.isHandled("ok");
+};
+
+Window_Selectable.prototype.isCancelEnabled = function() {
+    return this.isHandled("cancel");
+};
+
+Window_Selectable.prototype.isOkTriggered = function() {
+    return this._canRepeat ? Input.isRepeated("ok") : Input.isTriggered("ok");
+};
+
+Window_Selectable.prototype.isCancelTriggered = function() {
+    return Input.isRepeated("cancel");
+};
+
+// #endregion
+
+//------------------
+// #region Input - Handlers
+//------------------
 
 Window_Selectable.prototype.setHandler = function(symbol, method) {
     this._handlers[symbol] = method;
@@ -212,17 +317,45 @@ Window_Selectable.prototype.callHandler = function(symbol) {
     }
 };
 
-Window_Selectable.prototype.isOpenAndActive = function() {
-    return this.isOpen() && this.visible && this.active;
+Window_Selectable.prototype.callOkHandler = function() {
+    this.callHandler("ok");
 };
 
-Window_Selectable.prototype.isCursorMovable = function() {
-    return (
-        this.isOpenAndActive() &&
-        !this._cursorFixed &&
-        !this._cursorAll &&
-        this.maxItems() > 0
-    );
+Window_Selectable.prototype.callCancelHandler = function() {
+    this.callHandler("cancel");
+};
+
+// #endregion
+
+//------------------
+// #region Input - Processing - Cursor Movement
+//------------------
+
+Window_Selectable.prototype.processCursorMove = function() {
+    if (this.isCursorMovable()) {
+        const lastIndex = this.index();
+        if (Input.isRepeated("down")) {
+            this.cursorDown(Input.isTriggered("down"));
+        }
+        if (Input.isRepeated("up")) {
+            this.cursorUp(Input.isTriggered("up"));
+        }
+        if (Input.isRepeated("right")) {
+            this.cursorRight(Input.isTriggered("right"));
+        }
+        if (Input.isRepeated("left")) {
+            this.cursorLeft(Input.isTriggered("left"));
+        }
+        if (!this.isHandled("pagedown") && Input.isTriggered("pagedown")) {
+            this.cursorPagedown();
+        }
+        if (!this.isHandled("pageup") && Input.isTriggered("pageup")) {
+            this.cursorPageup();
+        }
+        if (this.index() !== lastIndex) {
+            this.playCursorSound();
+        }
+    }
 };
 
 Window_Selectable.prototype.cursorDown = function(wrap) {
@@ -280,43 +413,11 @@ Window_Selectable.prototype.cursorPageup = function() {
     }
 };
 
-Window_Selectable.prototype.isScrollEnabled = function() {
-    return this.active || this.index() < 0;
-};
+// #endregion
 
-Window_Selectable.prototype.update = function() {
-    this.processCursorMove();
-    this.processHandling();
-    this.processTouch();
-    Window_Scrollable.prototype.update.call(this);
-};
-
-Window_Selectable.prototype.processCursorMove = function() {
-    if (this.isCursorMovable()) {
-        const lastIndex = this.index();
-        if (Input.isRepeated("down")) {
-            this.cursorDown(Input.isTriggered("down"));
-        }
-        if (Input.isRepeated("up")) {
-            this.cursorUp(Input.isTriggered("up"));
-        }
-        if (Input.isRepeated("right")) {
-            this.cursorRight(Input.isTriggered("right"));
-        }
-        if (Input.isRepeated("left")) {
-            this.cursorLeft(Input.isTriggered("left"));
-        }
-        if (!this.isHandled("pagedown") && Input.isTriggered("pagedown")) {
-            this.cursorPagedown();
-        }
-        if (!this.isHandled("pageup") && Input.isTriggered("pageup")) {
-            this.cursorPageup();
-        }
-        if (this.index() !== lastIndex) {
-            this.playCursorSound();
-        }
-    }
-};
+//------------------
+// #region Input - Processing - Handling
+//------------------
 
 Window_Selectable.prototype.processHandling = function() {
     if (this.isOpenAndActive()) {
@@ -335,6 +436,48 @@ Window_Selectable.prototype.processHandling = function() {
     }
 };
 
+Window_Selectable.prototype.processOk = function() {
+    if (this.isCurrentItemEnabled()) {
+        this.playOkSound();
+        this.updateInputData();
+        this.deactivate();
+        this.callOkHandler();
+    } else {
+        this.playBuzzerSound();
+    }
+};
+
+Window_Selectable.prototype.processCancel = function() {
+    SoundManager.playCancel();
+    this.updateInputData();
+    this.deactivate();
+    this.callCancelHandler();
+};
+
+Window_Selectable.prototype.processPageup = function() {
+    this.updateInputData();
+    this.deactivate();
+    this.callHandler("pageup");
+};
+
+Window_Selectable.prototype.processPagedown = function() {
+    this.updateInputData();
+    this.deactivate();
+    this.callHandler("pagedown");
+};
+
+Window_Selectable.prototype.updateInputData = function() {
+    Input.update();
+    TouchInput.update();
+    this.clearScrollStatus();
+};
+
+// #endregion
+
+//------------------
+// #region Input - Processing - Touch
+//------------------
+
 Window_Selectable.prototype.processTouch = function() {
     if (this.isOpenAndActive()) {
         if (this.isHoverEnabled() && TouchInput.isHovered()) {
@@ -348,10 +491,6 @@ Window_Selectable.prototype.processTouch = function() {
             this.onTouchCancel();
         }
     }
-};
-
-Window_Selectable.prototype.isHoverEnabled = function() {
-    return true;
 };
 
 Window_Selectable.prototype.onTouchSelect = function(trigger) {
@@ -414,72 +553,11 @@ Window_Selectable.prototype.hitTest = function(x, y) {
     return -1;
 };
 
-Window_Selectable.prototype.isTouchOkEnabled = function() {
-    return (
-        this.isOkEnabled() &&
-        (this._cursorFixed || this._cursorAll || this._doubleTouch)
-    );
-};
+// #endregion
 
-Window_Selectable.prototype.isOkEnabled = function() {
-    return this.isHandled("ok");
-};
-
-Window_Selectable.prototype.isCancelEnabled = function() {
-    return this.isHandled("cancel");
-};
-
-Window_Selectable.prototype.isOkTriggered = function() {
-    return this._canRepeat ? Input.isRepeated("ok") : Input.isTriggered("ok");
-};
-
-Window_Selectable.prototype.isCancelTriggered = function() {
-    return Input.isRepeated("cancel");
-};
-
-Window_Selectable.prototype.processOk = function() {
-    if (this.isCurrentItemEnabled()) {
-        this.playOkSound();
-        this.updateInputData();
-        this.deactivate();
-        this.callOkHandler();
-    } else {
-        this.playBuzzerSound();
-    }
-};
-
-Window_Selectable.prototype.callOkHandler = function() {
-    this.callHandler("ok");
-};
-
-Window_Selectable.prototype.processCancel = function() {
-    SoundManager.playCancel();
-    this.updateInputData();
-    this.deactivate();
-    this.callCancelHandler();
-};
-
-Window_Selectable.prototype.callCancelHandler = function() {
-    this.callHandler("cancel");
-};
-
-Window_Selectable.prototype.processPageup = function() {
-    this.updateInputData();
-    this.deactivate();
-    this.callHandler("pageup");
-};
-
-Window_Selectable.prototype.processPagedown = function() {
-    this.updateInputData();
-    this.deactivate();
-    this.callHandler("pagedown");
-};
-
-Window_Selectable.prototype.updateInputData = function() {
-    Input.update();
-    TouchInput.update();
-    this.clearScrollStatus();
-};
+//------------------
+// #region Behavior - Cursor
+//------------------
 
 Window_Selectable.prototype.ensureCursorVisible = function(smooth) {
     if (this._cursorAll) {
@@ -505,6 +583,87 @@ Window_Selectable.prototype.ensureCursorVisible = function(smooth) {
     }
 };
 
+Window_Selectable.prototype.cursorFixed = function() {
+    return this._cursorFixed;
+};
+
+Window_Selectable.prototype.setCursorFixed = function(cursorFixed) {
+    this._cursorFixed = cursorFixed;
+};
+
+Window_Selectable.prototype.cursorAll = function() {
+    return this._cursorAll;
+};
+
+Window_Selectable.prototype.setCursorAll = function(cursorAll) {
+    this._cursorAll = cursorAll;
+};
+
+// #endregion
+
+//------------------
+// #region Behavior - Select
+//------------------
+
+Window_Selectable.prototype.index = function() {
+    return this._index;
+};
+
+Window_Selectable.prototype.select = function(index) {
+    this._index = index;
+    this.refreshCursor();
+    this.callUpdateHelp();
+};
+
+Window_Selectable.prototype.forceSelect = function(index) {
+    this.select(index);
+    this.ensureCursorVisible(false);
+};
+
+Window_Selectable.prototype.smoothSelect = function(index) {
+    this.select(index);
+    this.ensureCursorVisible(true);
+};
+
+Window_Selectable.prototype.deselect = function() {
+    this.select(-1);
+};
+
+Window_Selectable.prototype.reselect = function() {
+    this.select(this._index);
+    this.ensureCursorVisible(true);
+    this.cursorVisible = true;
+};
+
+// #endregion
+
+//------------------
+// #region Behavior - Attached Windows
+//------------------
+
+Window_Selectable.prototype.setHelpWindow = function(helpWindow) {
+    this._helpWindow = helpWindow;
+    this.callUpdateHelp();
+};
+
+Window_Selectable.prototype.setHelpWindowItem = function(item) {
+    if (this._helpWindow) {
+        this._helpWindow.setItem(item);
+    }
+};
+
+Window_Selectable.prototype.showHelpWindow = function() {
+    if (this._helpWindow) {
+        this._helpWindow.show();
+    }
+};
+
+Window_Selectable.prototype.hideHelpWindow = function() {
+    if (this._helpWindow) {
+        this._helpWindow.hide();
+    }
+};
+
 Window_Selectable.prototype.callUpdateHelp = function() {
     if (this.active && this._helpWindow) {
         this.updateHelp();
@@ -515,93 +674,35 @@ Window_Selectable.prototype.updateHelp = function() {
     this._helpWindow.clear();
 };
 
-Window_Selectable.prototype.setHelpWindowItem = function(item) {
-    if (this._helpWindow) {
-        this._helpWindow.setItem(item);
-    }
+// #endregion
+
+//------------------
+// #region Behavior - Window
+//------------------
+
+Window_Selectable.prototype.update = function() {
+    this.processCursorMove();
+    this.processHandling();
+    this.processTouch();
+    Window_Scrollable.prototype.update.call(this);
 };
 
-Window_Selectable.prototype.isCurrentItemEnabled = function() {
-    return true;
+Window_Selectable.prototype.isOpenAndActive = function() {
+    return this.isOpen() && this.visible && this.active;
 };
 
-Window_Selectable.prototype.drawAllItems = function() {
-    const topIndex = this.topIndex();
-    for (let i = 0; i < this.maxVisibleItems(); i++) {
-        const index = topIndex + i;
-        if (index < this.maxItems()) {
-            this.drawItem(index);
-        }
-    }
+Window_Selectable.prototype.activate = function() {
+    Window_Scrollable.prototype.activate.call(this);
+    this.reselect();
 };
 
-Window_Selectable.prototype.drawItem = function(/*index*/) {
-    //
-};
-
-Window_Selectable.prototype.clearItem = function(index) {
-    const rect = this.itemRect(index);
-    rect.x += this.positionPaddingX(); rect.y += this.positionPaddingY();
-    this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
-    this.contentsBack.clearRect(rect.x, rect.y, rect.width, rect.height);
-};
-
-Window_Selectable.prototype.redrawItem = function(index) {
-    if (index >= 0) {
-        this.clearItem(index);
-        this.drawItem(index);
-    }
-};
-
-Window_Selectable.prototype.redrawCurrentItem = function() {
-    this.redrawItem(this.index());
+Window_Selectable.prototype.deactivate = function() {
+    Window_Scrollable.prototype.deactivate.call(this);
+    this.reselect();
 };
 
 Window_Selectable.prototype.refresh = function() {
     this.paint();
 };
 
-Window_Selectable.prototype.paint = function() {
-    if (this.contents) {
-        this.contents.clear();
-        this.contentsBack.clear();
-        this.drawAllItems();
-    }
-};
-
-/**
- * width to add cursor to fit it around window item.
- */
-Window_Selectable.prototype.cursorFittingX = function() {
-    return 8;
-};
-
-/**
- * height to add cursor to fit it around window item.
- */
-Window_Selectable.prototype.cursorFittingY = function() {
-    return 6;
-};
-
-Window_Selectable.prototype.refreshCursor = function() {
-    if (this._cursorAll) {
-        this.refreshCursorForAll();
-    } else if (this.index() >= 0) {
-        const rect = this.itemRectForCursor(this.index());
-        this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
-    } else {
-        this.setCursorRect(0, 0, 0, 0);
-    }
-};
-
-Window_Selectable.prototype.refreshCursorForAll = function() {
-    const maxItems = this.maxItems();
-    if (maxItems > 0) {
-        const rect = this.itemRect(0);
-        rect.enlarge(this.itemRect(maxItems - 1));
-        this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
-    } else {
-        this.setCursorRect(0, 0, 0, 0);
-    }
-};
-
+// #endregion

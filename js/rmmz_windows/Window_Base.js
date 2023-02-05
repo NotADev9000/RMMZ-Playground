@@ -52,6 +52,30 @@ Window_Base.prototype.fittingHeight = function(numLines) {
     return allItemsHeight + padding;
 };
 
+// #endregion
+
+//------------------
+// #region Content Sizing
+//------------------
+
+Window_Base.prototype.createContents = function() {
+    const width = this.contentsWidth();
+    const height = this.contentsHeight();
+    this.destroyContents();
+    this.contents = new Bitmap(width, height);
+    this.contentsBack = new Bitmap(width, height);
+    this.resetFontSettings();
+};
+
+Window_Base.prototype.destroyContents = function() {
+    if (this.contents) {
+        this.contents.destroy();
+    }
+    if (this.contentsBack) {
+        this.contentsBack.destroy();
+    }
+};
+
 Window_Base.prototype.contentsWidth = function() {
     return this.innerWidth;
 };
@@ -67,12 +91,6 @@ Window_Base.prototype.centerWidth = function() {
 Window_Base.prototype.centerHeight = function() {
     return this.innerHeight - (this.positionPaddingY() * 2);
 };
-
-// #endregion
-
-//------------------
-// #region Content Sizing
-//------------------
 
 Window_Base.prototype.framePadding = function() {
     return $gameSystem.framePadding();
@@ -158,24 +176,6 @@ Window_Base.prototype.baseTextRect = function() {
 // #region Window Display
 //------------------
 
-Window_Base.prototype.createContents = function() {
-    const width = this.contentsWidth();
-    const height = this.contentsHeight();
-    this.destroyContents();
-    this.contents = new Bitmap(width, height);
-    this.contentsBack = new Bitmap(width, height);
-    this.resetFontSettings();
-};
-
-Window_Base.prototype.destroyContents = function() {
-    if (this.contents) {
-        this.contents.destroy();
-    }
-    if (this.contentsBack) {
-        this.contentsBack.destroy();
-    }
-};
-
 Window_Base.prototype.loadWindowskin = function() {
     this.windowskin = ImageManager.loadSystem("Window");
 };
@@ -242,7 +242,7 @@ Window_Base.prototype.resetTextColor = function() {
 // #endregion
 
 //------------------
-// #region Drawing Elements
+// #region Draw - Elements
 //------------------
 
 Window_Base.prototype.drawRect = function(x, y, width, height) {
@@ -325,7 +325,95 @@ Window_Base.prototype.drawCurrencyValue = function(value, unit, x, y, width) {
 // #endregion
 
 //------------------
-// #region Processing Text
+// #region Sound - Input
+//------------------
+
+Window_Base.prototype.playCursorSound = function() {
+    SoundManager.playCursor();
+};
+
+Window_Base.prototype.playOkSound = function() {
+    SoundManager.playOk();
+};
+
+Window_Base.prototype.playBuzzerSound = function() {
+    SoundManager.playBuzzer();
+};
+
+// #endregion
+
+//------------------
+// #region Data - Game
+// TODO: move these functions to more appropriate class
+//------------------
+
+Window_Base.prototype.actorName = function(n) {
+    const actor = n >= 1 ? $gameActors.actor(n) : null;
+    return actor ? actor.name() : "";
+};
+
+Window_Base.prototype.partyMemberName = function(n) {
+    const actor = n >= 1 ? $gameParty.members()[n - 1] : null;
+    return actor ? actor.name() : "";
+};
+
+// #endregion
+
+//------------------
+// #region Behavior - Dimmer
+//------------------
+
+Window_Base.prototype.createDimmerSprite = function() {
+    this._dimmerSprite = new Sprite();
+    this._dimmerSprite.bitmap = new Bitmap(0, 0);
+    this._dimmerSprite.x = -4;
+    this.addChildToBack(this._dimmerSprite);
+};
+
+Window_Base.prototype.showBackgroundDimmer = function() {
+    if (!this._dimmerSprite) {
+        this.createDimmerSprite();
+    }
+    const bitmap = this._dimmerSprite.bitmap;
+    if (bitmap.width !== this.width || bitmap.height !== this.height) {
+        this.refreshDimmerBitmap();
+    }
+    this._dimmerSprite.visible = true;
+    this.updateBackgroundDimmer();
+};
+
+Window_Base.prototype.hideBackgroundDimmer = function() {
+    if (this._dimmerSprite) {
+        this._dimmerSprite.visible = false;
+    }
+};
+
+Window_Base.prototype.updateBackgroundDimmer = function() {
+    if (this._dimmerSprite) {
+        this._dimmerSprite.opacity = this.openness;
+    }
+};
+
+Window_Base.prototype.refreshDimmerBitmap = function() {
+    if (this._dimmerSprite) {
+        const bitmap = this._dimmerSprite.bitmap;
+        const w = this.width > 0 ? this.width + 8 : 0;
+        const h = this.height;
+        const m = this.padding;
+        const c1 = ColorManager.dimColor1();
+        const c2 = ColorManager.dimColor2();
+        bitmap.resize(w, h);
+        bitmap.gradientFillRect(0, 0, w, m, c2, c1, true);
+        bitmap.fillRect(0, m, w, h - m * 2, c1);
+        bitmap.gradientFillRect(0, h - m, w, m, c1, c2, true);
+        this._dimmerSprite.setFrame(0, 0, w, h);
+    }
+};
+
+// #endregion
+
+//------------------
+// #region Behavior - Text
 //------------------
 
 Window_Base.prototype.createTextState = function(text, x, y, width) {
@@ -521,78 +609,7 @@ Window_Base.prototype.maxFontSizeInLine = function(line) {
 // #endregion
 
 //------------------
-// #region Dimmer Sprite
-//------------------
-
-Window_Base.prototype.createDimmerSprite = function() {
-    this._dimmerSprite = new Sprite();
-    this._dimmerSprite.bitmap = new Bitmap(0, 0);
-    this._dimmerSprite.x = -4;
-    this.addChildToBack(this._dimmerSprite);
-};
-
-Window_Base.prototype.showBackgroundDimmer = function() {
-    if (!this._dimmerSprite) {
-        this.createDimmerSprite();
-    }
-    const bitmap = this._dimmerSprite.bitmap;
-    if (bitmap.width !== this.width || bitmap.height !== this.height) {
-        this.refreshDimmerBitmap();
-    }
-    this._dimmerSprite.visible = true;
-    this.updateBackgroundDimmer();
-};
-
-Window_Base.prototype.hideBackgroundDimmer = function() {
-    if (this._dimmerSprite) {
-        this._dimmerSprite.visible = false;
-    }
-};
-
-Window_Base.prototype.updateBackgroundDimmer = function() {
-    if (this._dimmerSprite) {
-        this._dimmerSprite.opacity = this.openness;
-    }
-};
-
-Window_Base.prototype.refreshDimmerBitmap = function() {
-    if (this._dimmerSprite) {
-        const bitmap = this._dimmerSprite.bitmap;
-        const w = this.width > 0 ? this.width + 8 : 0;
-        const h = this.height;
-        const m = this.padding;
-        const c1 = ColorManager.dimColor1();
-        const c2 = ColorManager.dimColor2();
-        bitmap.resize(w, h);
-        bitmap.gradientFillRect(0, 0, w, m, c2, c1, true);
-        bitmap.fillRect(0, m, w, h - m * 2, c1);
-        bitmap.gradientFillRect(0, h - m, w, m, c1, c2, true);
-        this._dimmerSprite.setFrame(0, 0, w, h);
-    }
-};
-
-// #endregion
-
-//------------------
-// #region Window Sounds
-//------------------
-
-Window_Base.prototype.playCursorSound = function() {
-    SoundManager.playCursor();
-};
-
-Window_Base.prototype.playOkSound = function() {
-    SoundManager.playOk();
-};
-
-Window_Base.prototype.playBuzzerSound = function() {
-    SoundManager.playBuzzer();
-};
-
-// #endregion
-
-//------------------
-// #region Behaviour
+// #region Behavior - Window
 //------------------
 
 Window_Base.prototype.update = function() {
@@ -657,23 +674,6 @@ Window_Base.prototype.activate = function() {
 
 Window_Base.prototype.deactivate = function() {
     this.active = false;
-};
-
-// #endregion
-
-//------------------
-// #region Data
-// TODO: move these functions to more appropriate class
-//------------------
-
-Window_Base.prototype.actorName = function(n) {
-    const actor = n >= 1 ? $gameActors.actor(n) : null;
-    return actor ? actor.name() : "";
-};
-
-Window_Base.prototype.partyMemberName = function(n) {
-    const actor = n >= 1 ? $gameParty.members()[n - 1] : null;
-    return actor ? actor.name() : "";
 };
 
 // #endregion
