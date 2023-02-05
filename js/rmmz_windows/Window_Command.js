@@ -17,6 +17,28 @@ Window_Command.prototype.initialize = function(rect) {
     this.activate();
 };
 
+//------------------
+// #region Draw - Items
+//------------------
+
+Window_Command.prototype.drawItem = function(index) {
+    const rect = this.itemRect(index);
+    const align = this.itemTextAlign();
+    this.resetTextColor();
+    this.changePaintOpacity(this.isCommandEnabled(index));
+    this.drawText(this.commandName(index), rect.x, rect.y, rect.width, align);
+};
+
+Window_Command.prototype.itemTextAlign = function() {
+    return "center";
+};
+
+// #endregion
+
+//------------------
+// #region Data - Items
+//------------------
+
 Window_Command.prototype.maxItems = function() {
     return this._list.length;
 };
@@ -29,12 +51,42 @@ Window_Command.prototype.makeCommandList = function() {
     //
 };
 
-// prettier-ignore
-Window_Command.prototype.addCommand = function(
-    name, symbol, enabled = true, ext = null
-) {
+Window_Command.prototype.addCommand = function(name, symbol, enabled = true, ext = null) {
     this._list.push({ name: name, symbol: symbol, enabled: enabled, ext: ext });
 };
+
+// #endregion
+
+//------------------
+// #region Input - Queries
+//------------------
+
+Window_Command.prototype.isOkEnabled = function() {
+    return true;
+};
+
+// #endregion
+
+//------------------
+// #region Input - Handlers
+//------------------
+
+Window_Command.prototype.callOkHandler = function() {
+    const symbol = this.currentSymbol();
+    if (this.isHandled(symbol)) {
+        this.callHandler(symbol);
+    } else if (this.isHandled("ok")) {
+        Window_Selectable.prototype.callOkHandler.call(this);
+    } else {
+        this.activate();
+    }
+};
+
+// #endregion
+
+//------------------
+// #region Behavior - Select
+//------------------
 
 Window_Command.prototype.commandName = function(index) {
     return this._list[index].name;
@@ -90,32 +142,11 @@ Window_Command.prototype.selectExt = function(ext) {
     }
 };
 
-Window_Command.prototype.drawItem = function(index) {
-    const rect = this.itemRect(index);
-    const align = this.itemTextAlign();
-    this.resetTextColor();
-    this.changePaintOpacity(this.isCommandEnabled(index));
-    this.drawText(this.commandName(index), rect.x, rect.y, rect.width, align);
-};
+// #endregion
 
-Window_Command.prototype.itemTextAlign = function() {
-    return "center";
-};
-
-Window_Command.prototype.isOkEnabled = function() {
-    return true;
-};
-
-Window_Command.prototype.callOkHandler = function() {
-    const symbol = this.currentSymbol();
-    if (this.isHandled(symbol)) {
-        this.callHandler(symbol);
-    } else if (this.isHandled("ok")) {
-        Window_Selectable.prototype.callOkHandler.call(this);
-    } else {
-        this.activate();
-    }
-};
+//------------------
+// #region Behavior - Window
+//------------------
 
 Window_Command.prototype.refresh = function() {
     this.clearCommandList();
@@ -123,3 +154,4 @@ Window_Command.prototype.refresh = function() {
     Window_Selectable.prototype.refresh.call(this);
 };
 
+// #endregion

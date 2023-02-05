@@ -247,10 +247,6 @@ Window_Selectable.prototype.maxItems = function() {
     return 0;
 };
 
-Window_Selectable.prototype.isCurrentItemEnabled = function() {
-    return true;
-};
-
 // #endregion
 
 //------------------
@@ -633,6 +629,10 @@ Window_Selectable.prototype.reselect = function() {
     this.select(this._index);
     this.ensureCursorVisible(true);
     this.cursorVisible = true;
+};
+
+Window_Selectable.prototype.isCurrentItemEnabled = function() {
+    return true;
 };
 
 // #endregion
