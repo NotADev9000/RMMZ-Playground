@@ -1,0 +1,9 @@
+Behavior of walking at half tile width
+Fully Aligned = in line with object
+Half Aligned = half of character is in line with object
+
+* events (characters) are collided with when fully & half aligned
+* if tile (or events marked with a note) collided with from y-direction while half aligned, player should take one step around it
+	e.g. walking up with half tree in front on left, whole passable space in front on right, player should move right by one
+* player should be able to walk upwards to tile (& events marked with note) within half tile
+	e.g. tree tile on y=10, player can walk on y=11 & y=10.5 but can't go up to y=10
