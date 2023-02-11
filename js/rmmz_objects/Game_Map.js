@@ -348,20 +348,20 @@ Game_Map.prototype.roundY = function(y) {
     return this.isLoopVertical() ? y.mod(this.height()) : y;
 };
 
-Game_Map.prototype.xWithDirection = function(x, d) {
-    return x + (d === 6 ? 1 : d === 4 ? -1 : 0);
+Game_Map.prototype.xWithDirection = function(x, d, amount = 1) {
+    return x + (d === 6 ? amount : d === 4 ? -amount : 0);
 };
 
-Game_Map.prototype.yWithDirection = function(y, d) {
-    return y + (d === 2 ? 1 : d === 8 ? -1 : 0);
+Game_Map.prototype.yWithDirection = function(y, d, amount = 1) {
+    return y + (d === 2 ? amount : d === 8 ? -amount : 0);
 };
 
-Game_Map.prototype.roundXWithDirection = function(x, d) {
-    return this.roundX(x + (d === 6 ? 1 : d === 4 ? -1 : 0));
+Game_Map.prototype.roundXWithDirection = function(x, d, amount = 1) {
+    return this.roundX(x + (d === 6 ? amount : d === 4 ? -amount : 0));
 };
 
-Game_Map.prototype.roundYWithDirection = function(y, d) {
-    return this.roundY(y + (d === 2 ? 1 : d === 8 ? -1 : 0));
+Game_Map.prototype.roundYWithDirection = function(y, d, amount = 1) {
+    return this.roundY(y + (d === 2 ? amount : d === 8 ? -amount : 0));
 };
 
 Game_Map.prototype.deltaX = function(x1, x2) {

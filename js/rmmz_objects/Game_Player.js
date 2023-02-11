@@ -514,15 +514,48 @@ Game_Player.prototype.checkEventTriggerHere = function(triggers) {
 Game_Player.prototype.checkEventTriggerThere = function(triggers) {
     if (this.canStartLocalEvents()) {
         const direction = this.direction();
-        const x1 = this.x;
-        const y1 = this.y;
-        const x2 = $gameMap.roundXWithDirection(x1, direction);
-        const y2 = $gameMap.roundYWithDirection(y1, direction);
-        this.startMapEvent(x2, y2, triggers, true);
-        if (!$gameMap.isAnyEventStarting() && $gameMap.isCounter(x2, y2)) {
-            const x3 = $gameMap.roundXWithDirection(x2, direction);
-            const y3 = $gameMap.roundYWithDirection(y2, direction);
-            this.startMapEvent(x3, y3, triggers, true);
+        const positions = this.splitPosition(this.x, this.y, direction, false);
+        const positionsInFront = [[], []];
+        let x2, y2;
+
+        // check spaces 1 tile in front
+        let eventStarting = false;
+        for (let i = 0; i < positions[0].length; i++) {
+            x2 = $gameMap.roundXWithDirection(positions[0][i], direction);
+
+            for (let j = 0; j < positions[1].length; j++) {
+                y2 = $gameMap.roundYWithDirection(positions[1][j], direction);
+                this.startMapEvent(x2, y2, triggers, true);
+
+                if ($gameMap.isAnyEventStarting()) {
+                    eventStarting = true;
+                    break;
+                } else {
+                    // store tiles in front to check for counter tiles later
+                    positionsInFront[0].push(x2);
+                    positionsInFront[1].push(y2);
+                }
+            }
+
+            if (eventStarting) break;
+        }
+
+        // if counter: check spaces 2 tiles in front
+        if (!eventStarting) {
+            let x3, y3;
+
+            for (let k = 0; k < 3; k++) {
+                x2 = positionsInFront[0][k];
+                y2 = positionsInFront[1][k];
+
+                if ($gameMap.isCounter(x2, y2)) {
+                    x3 = $gameMap.roundXWithDirection(x2, direction);
+                    y3 = $gameMap.roundYWithDirection(y2, direction);
+                    this.startMapEvent(x3, y3, triggers, true);
+
+                    if ($gameMap.isAnyEventStarting()) break;
+                }   
+            }
         }
     }
 };
