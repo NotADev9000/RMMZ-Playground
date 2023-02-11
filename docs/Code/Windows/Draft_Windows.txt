@@ -1,0 +1,20 @@
+width||height: property
+* entire window
+
+inner: property
+* width||height - framePadding (in Window)
+=> from edge of frame to opposite edge of frame
+
+contents:
+* usually same as inner (in Window_Base)
+=> called when creating contents bitmap
+   can be a greater value than window size to allow for drawing items outside of window
+
+center: func
+* inner - positionPadding (in Window_Base)
+
+
+==================================================================
+overall: func
+* size of all items and spacing even if they aren't on the page
+=> used in scrollable (put in winScrollable doc when made)
