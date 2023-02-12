@@ -7,6 +7,28 @@ function Game_System() {
     this.initialize(...arguments);
 }
 
+Object.defineProperties(Game_System.prototype, {
+    moveAmount: {
+        get: function() {
+            return this._moveAmount;
+        },
+        set: function(value) {
+            this._moveAmount = value;
+        },
+        configurable: true
+    },
+    useAltMovement: {
+        get: function() {
+            return this._useAltMovement;
+        },
+        set: function(value) {
+            this._useAltMovement = value;
+            this.moveAmount = value ? 0.5 : 1;
+        },
+        configurable: true
+    }
+});
+
 Game_System.prototype.initialize = function() {
     this._saveEnabled = true;
     this._menuEnabled = true;
@@ -27,6 +49,8 @@ Game_System.prototype.initialize = function() {
     this._defeatMe = null;
     this._savedBgm = null;
     this._walkingBgm = null;
+    this._useAltMovement = true;
+    this._moveAmount = 0.5;
 };
 
 Game_System.prototype.isJapanese = function() {
@@ -257,4 +281,3 @@ Game_System.prototype.windowOpacity = function() {
         return 192;
     }
 };
-

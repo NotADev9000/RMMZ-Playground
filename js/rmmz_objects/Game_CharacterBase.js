@@ -169,13 +169,16 @@ Game_CharacterBase.prototype.reverseDir = function(d) {
  */
 Game_CharacterBase.prototype.getCheckPositionsHere = function(x, y) {
     resultX = [x]; resultY = y;
+    if ($gameSystem.useAltMovement) {
+        const moveAmount = $gameSystem.moveAmount;
 
-    if (!Number.isInteger(x)) {
-        resultX.pop();
-        resultX.push(x - 0.5, x + 0.5);
-    }
-    if (!Number.isInteger(y)) {
-        resultY += 0.5;
+        if (!Number.isInteger(x)) {
+            resultX.pop();
+            resultX.push(x - moveAmount, x + moveAmount);
+        }
+        if (!Number.isInteger(y)) {
+            resultY += moveAmount;
+        }
     }
 
     return [resultX, resultY];
@@ -188,33 +191,36 @@ Game_CharacterBase.prototype.getCheckPositionsHere = function(x, y) {
  */
 Game_CharacterBase.prototype.getCheckPositions = function(x, y, d, tileCheck = true) {
     x = [x]; y = [y];
-    let coords1, coords2, round;
+    if ($gameSystem.useAltMovement) {
+        const moveAmount = $gameSystem.moveAmount;
+        let coords1, coords2, round;
 
-    switch (d) {
-        case 2:
-            coords1 = y; coords2 = x;
-            round = Math.floor;
-            break;
-        case 4:
-            coords1 = x; coords2 = y;
-            round = Math.ceil;
-            break;
-        case 6:
-            coords1 = x; coords2 = y;
-            round = Math.floor;
-            break;
-        default: // 8
-            coords1 = y; coords2 = x;
-            round = Math.ceil;
-            break;
+        switch (d) {
+            case 2:
+                coords1 = y; coords2 = x;
+                round = Math.floor;
+                break;
+            case 4:
+                coords1 = x; coords2 = y;
+                round = Math.ceil;
+                break;
+            case 6:
+                coords1 = x; coords2 = y;
+                round = Math.floor;
+                break;
+            default: // 8
+                coords1 = y; coords2 = x;
+                round = Math.ceil;
+                break;
+        }
+
+        // coords1 & 2 are set to x & y above meaning changes below overwrite the x & y variables
+        if (tileCheck && !Number.isInteger(coords1[0])) coords1.unshift(round(coords1[0]));
+        const orignalCoord = coords2[0];
+        coords2.unshift(orignalCoord - moveAmount);
+        coords2.push(orignalCoord + moveAmount);
     }
-
-    // coords1 & 2 are set to x & y above meaning changes below overwrite the x & y variables
-    if (tileCheck && !Number.isInteger(coords1[0])) coords1.unshift(round(coords1[0]));
-    const orignalCoord = coords2[0];
-    coords2.unshift(orignalCoord - 0.5);
-    coords2.push(orignalCoord + 0.5);
-
+    
     return [x, y];
 };
 
@@ -551,14 +557,14 @@ Game_CharacterBase.prototype.setMovementSuccess = function(success) {
     this._movementSuccess = success;
 };
 
-Game_CharacterBase.prototype.moveStraight = function(d) {
+Game_CharacterBase.prototype.moveStraight = function(d, moveAmount = $gameSystem.moveAmount) {
     this.setMovementSuccess(this.canPass(this._x, this._y, d));
     if (this.isMovementSucceeded()) {
         this.setDirection(d);
-        this._x = $gameMap.roundXWithDirection(this._x, d, 0.5);
-        this._y = $gameMap.roundYWithDirection(this._y, d, 0.5);
-        this._realX = $gameMap.xWithDirection(this._x, this.reverseDir(d), 0.5);
-        this._realY = $gameMap.yWithDirection(this._y, this.reverseDir(d), 0.5);
+        this._x = $gameMap.roundXWithDirection(this._x, d, moveAmount);
+        this._y = $gameMap.roundYWithDirection(this._y, d, moveAmount);
+        this._realX = $gameMap.xWithDirection(this._x, this.reverseDir(d), moveAmount);
+        this._realY = $gameMap.yWithDirection(this._y, this.reverseDir(d), moveAmount);
         this.increaseSteps();
     } else {
         this.setDirection(d);
