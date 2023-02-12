@@ -232,13 +232,15 @@ Game_Player.prototype.executeEncounter = function() {
     }
 };
 
-Game_Player.prototype.startMapEvent = function(x, y, triggers, normal) {
+Game_Player.prototype.startMapEvent = function(x, y, triggers, normal, checkAlignment = false) {
     if (!$gameMap.isEventRunning()) {
         for (const event of $gameMap.eventsXy(x, y)) {
-            if (
-                event.isTriggerIn(triggers) &&
-                event.isNormalPriority() === normal
-            ) {
+            if (event.isTriggerIn(triggers) && event.isNormalPriority() === normal) {
+                // if player isn't fully aligned with event check if meta tag, allowing touch to occur, is present
+                if (checkAlignment && (this.x !== event.x || this.y !== event.y)) {
+                    if (!event.event().meta.halfTouch) return;
+                }
+
                 event.start();
             }
         }
@@ -507,14 +509,18 @@ Game_Player.prototype.encounterProgressValue = function() {
 
 Game_Player.prototype.checkEventTriggerHere = function(triggers) {
     if (this.canStartLocalEvents()) {
-        this.startMapEvent(this.x, this.y, triggers, false);
+        const positions = this.getCheckPositionsHere(this.x, this.y);
+        for (let i = 0; i < positions[0].length; i++) {
+            this.startMapEvent(positions[0][i], positions[1], triggers, false, true);
+            if ($gameMap.isAnyEventStarting()) return;
+        }
     }
 };
 
 Game_Player.prototype.checkEventTriggerThere = function(triggers) {
     if (this.canStartLocalEvents()) {
         const direction = this.direction();
-        const positions = this.splitPosition(this.x, this.y, direction, false);
+        const positions = this.getCheckPositions(this.x, this.y, direction, false);
         const positionsInFront = [[], []];
         let x2, y2;
 

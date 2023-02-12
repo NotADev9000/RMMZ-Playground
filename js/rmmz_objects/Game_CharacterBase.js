@@ -165,14 +165,29 @@ Game_CharacterBase.prototype.reverseDir = function(d) {
 };
 
 /**
- * gets all the positions in front of the character that need checking for tiles and/or events
+ * gets co-ordinates under the character needed to check for below events 
+ */
+Game_CharacterBase.prototype.getCheckPositionsHere = function(x, y) {
+    resultX = [x]; resultY = y;
+
+    if (!Number.isInteger(x)) {
+        resultX.pop();
+        resultX.push(x - 0.5, x + 0.5);
+    }
+    if (!Number.isInteger(y)) {
+        resultY += 0.5;
+    }
+
+    return [resultX, resultY];
+};
+
+/**
+ * gets co-ordinates surrounding the character needed to check for tiles and/or events
  * 
  * @returns {array} x and y positions, each are arrays that hold multiple co-ordinates
  */
-Game_CharacterBase.prototype.splitPosition = function(x, y, d, tileCheck = true) {
-    x = [x];
-    y = [y];
-
+Game_CharacterBase.prototype.getCheckPositions = function(x, y, d, tileCheck = true) {
+    x = [x]; y = [y];
     let coords1, coords2, round;
 
     switch (d) {
@@ -204,7 +219,7 @@ Game_CharacterBase.prototype.splitPosition = function(x, y, d, tileCheck = true)
 };
 
 Game_CharacterBase.prototype.canPass = function(x, y, d) {
-    const positions = this.splitPosition(x, y, d);
+    const positions = this.getCheckPositions(x, y, d);
     let result = true;
 
     for (let i = 0; i < positions[0].length; i++) {
@@ -511,9 +526,17 @@ Game_CharacterBase.prototype.setTileImage = function(tileId) {
 };
 
 Game_CharacterBase.prototype.checkEventTriggerTouchFront = function(d) {
-    const x2 = $gameMap.roundXWithDirection(this._x, d);
-    const y2 = $gameMap.roundYWithDirection(this._y, d);
-    this.checkEventTriggerTouch(x2, y2);
+    const positions = this.getCheckPositions(this._x, this._y, d, false);
+    let x2, y2;
+
+    for (let i = 0; i < positions[0].length; i++) {
+        x2 = $gameMap.roundXWithDirection(positions[0][i], d);
+        for (let j = 0; j < positions[1].length; j++) {
+            y2 = $gameMap.roundYWithDirection(positions[1][j], d);
+            this.checkEventTriggerTouch(x2, y2);
+            if ($gameMap.isAnyEventStarting()) return;
+        }
+    }
 };
 
 Game_CharacterBase.prototype.checkEventTriggerTouch = function(/*x, y*/) {
