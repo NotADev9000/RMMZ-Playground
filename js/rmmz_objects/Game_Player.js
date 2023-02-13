@@ -637,11 +637,9 @@ Game_Player.prototype.isOnDamageFloor = function() {
     return $gameMap.isDamageFloor(this.x, this.y) && !this.isInAirship();
 };
 
-Game_Player.prototype.moveStraight = function(d) {
-    if (this.canPass(this.x, this.y, d)) {
-        this._followers.updateMove();
-    }
-    Game_Character.prototype.moveStraight.call(this, d);
+Game_Player.prototype.executeMoveStraight = function(d) {
+    this._followers.updateMove();
+    Game_Character.prototype.executeMoveStraight.call(this, d);
 };
 
 Game_Player.prototype.moveDiagonally = function(horz, vert) {
