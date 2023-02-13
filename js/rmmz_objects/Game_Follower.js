@@ -68,6 +68,7 @@ Game_Follower.prototype.chaseMovement = function(sx, sy) {
     }
 };
 
+// TODO: needs fixing as doesn't work when player turns but doesn't move
 Game_Follower.prototype.chaseMovementAlt = function(sx, sy, d) {
     const moveAmount = $gameSystem.moveAmount;
     const gapX = sx !== 0 && sx !== moveAmount && sx !== -moveAmount;

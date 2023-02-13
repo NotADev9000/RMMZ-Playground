@@ -557,19 +557,27 @@ Game_CharacterBase.prototype.setMovementSuccess = function(success) {
     this._movementSuccess = success;
 };
 
-Game_CharacterBase.prototype.moveStraight = function(d, moveAmount = $gameSystem.moveAmount) {
+Game_CharacterBase.prototype.moveStraight = function(d) {
     this.setMovementSuccess(this.canPass(this._x, this._y, d));
     if (this.isMovementSucceeded()) {
-        this.setDirection(d);
-        this._x = $gameMap.roundXWithDirection(this._x, d, moveAmount);
-        this._y = $gameMap.roundYWithDirection(this._y, d, moveAmount);
-        this._realX = $gameMap.xWithDirection(this._x, this.reverseDir(d), moveAmount);
-        this._realY = $gameMap.yWithDirection(this._y, this.reverseDir(d), moveAmount);
-        this.increaseSteps();
+        this.executeMoveStraight(d);
     } else {
-        this.setDirection(d);
-        this.checkEventTriggerTouchFront(d);
+        this.executeLookStraight(d);
     }
+};
+
+Game_CharacterBase.prototype.executeMoveStraight = function(d, moveAmount = $gameSystem.moveAmount) {
+    this.setDirection(d);
+    this._x = $gameMap.roundXWithDirection(this._x, d, moveAmount);
+    this._y = $gameMap.roundYWithDirection(this._y, d, moveAmount);
+    this._realX = $gameMap.xWithDirection(this._x, this.reverseDir(d), moveAmount);
+    this._realY = $gameMap.yWithDirection(this._y, this.reverseDir(d), moveAmount);
+    this.increaseSteps();
+};
+
+Game_CharacterBase.prototype.executeLookStraight = function(d) {
+    this.setDirection(d);
+    this.checkEventTriggerTouchFront(d);
 };
 
 Game_CharacterBase.prototype.moveDiagonally = function(horz, vert) {
