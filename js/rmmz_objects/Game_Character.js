@@ -282,7 +282,7 @@ Game_Character.prototype.deltaYFrom = function(y) {
 Game_Character.prototype.moveRandom = function() {
     const d = 2 + Math.randomInt(4) * 2;
     if (this.canPass(this.x, this.y, d)) {
-        this.moveStraight(d);
+        this.executeMoveStraight(d);
     }
 };
 

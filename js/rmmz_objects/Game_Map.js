@@ -457,6 +457,11 @@ Game_Map.prototype.eventIdXy = function(x, y) {
     return list.length === 0 ? 0 : list[0].eventId();
 };
 
+Game_Map.prototype.eventMetaXy = function(x, y) {
+    const list = this.eventsXy(x, y);
+    return list.length === 0 ? {} : list[0].event().meta;
+};
+
 Game_Map.prototype.scrollDown = function(distance) {
     if (this.isLoopVertical()) {
         this._displayY += distance;

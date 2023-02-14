@@ -37,6 +37,8 @@ Game_CharacterBase.prototype.initMembers = function() {
     this._opacity = 255;
     this._blendMode = 0;
     this._direction = 2;
+    this._directionMoveAround = 2;
+    this._canMoveAroundChar = true;
     this._pattern = 1;
     this._priorityType = 1;
     this._tileId = 0;
@@ -238,26 +240,6 @@ Game_CharacterBase.prototype.canPass = function(x, y, d) {
     return result;
 };
 
-Game_CharacterBase.prototype.executeCanPass = function(x, y, d) {
-    const allCheck = Number.isInteger(x) && Number.isInteger(y);
-    const x2 = $gameMap.roundXWithDirection(x, d);
-    const y2 = $gameMap.roundYWithDirection(y, d);
-
-    if (allCheck && !$gameMap.isValid(x2, y2)) {
-        return false;
-    }
-    if (this.isThrough() || this.isDebugThrough()) {
-        return true;
-    }
-    if (allCheck && !this.isMapPassable(x, y, d)) {
-        return false;
-    }
-    if (this.isCollidedWithCharacters(x2, y2)) {
-        return false;
-    }
-    return true;
-};
-
 Game_CharacterBase.prototype.canPassDiagonally = function(x, y, horz, vert) {
     const x2 = $gameMap.roundXWithDirection(x, horz);
     const y2 = $gameMap.roundYWithDirection(y, vert);
@@ -268,6 +250,47 @@ Game_CharacterBase.prototype.canPassDiagonally = function(x, y, horz, vert) {
         return true;
     }
     return false;
+};
+
+Game_CharacterBase.prototype.canMoveAround = function(x, y, d) {
+    if (this._canMoveAroundChar && (d === 2 || d === 8)) {
+        const moveAmount = $gameSystem.moveAmount;
+        let x2, y2;
+        if (this.canPass(x, y, 4)) {
+            x2 = $gameMap.roundXWithDirection(x, 4, moveAmount);
+            y2 = $gameMap.roundYWithDirection(y, 4, moveAmount);
+            if (this.canPass(x2, y2, d)) return 4;
+        }
+        
+        if (this.canPass(x, y, 6)) {
+            x2 = $gameMap.roundXWithDirection(x, 6, moveAmount);
+            y2 = $gameMap.roundYWithDirection(y, 6, moveAmount);
+            if (this.canPass(x2, y2, d)) return 6;
+        }
+    }
+
+    return 0;
+};
+
+Game_CharacterBase.prototype.executeCanPass = function(x, y, d) {
+    const checkTiles = Number.isInteger(x) && Number.isInteger(y);
+    const x2 = $gameMap.roundXWithDirection(x, d);
+    const y2 = $gameMap.roundYWithDirection(y, d);
+
+    if (checkTiles && !$gameMap.isValid(x2, y2)) {
+        return false;
+    }
+    if (this.isThrough() || this.isDebugThrough()) {
+        return true;
+    }
+    if (checkTiles && !this.isMapPassable(x, y, d)) {
+        return false;
+    }
+    if (this.isCollidedWithCharacters(x2, y2)) {
+        this.updateCanMoveAroundChar(x2, y2);
+        return false;
+    }
+    return true;
 };
 
 Game_CharacterBase.prototype.isMapPassable = function(x, y, d) {
@@ -288,6 +311,11 @@ Game_CharacterBase.prototype.isCollidedWithEvents = function(x, y) {
 
 Game_CharacterBase.prototype.isCollidedWithVehicles = function(x, y) {
     return $gameMap.boat().posNt(x, y) || $gameMap.ship().posNt(x, y);
+};
+
+Game_CharacterBase.prototype.updateCanMoveAroundChar = function(x, y) {
+    const meta = $gameMap.eventMetaXy(x, y);
+    if (meta) this._canMoveAroundChar = this._canMoveAroundChar && meta.moveAround;
 };
 
 Game_CharacterBase.prototype.setPosition = function(x, y) {
@@ -320,6 +348,14 @@ Game_CharacterBase.prototype.setDirection = function(d) {
         this._direction = d;
     }
     this.resetStopCount();
+};
+
+Game_CharacterBase.prototype.directionMoveAround = function() {
+    return this._directionMoveAround;
+};
+
+Game_CharacterBase.prototype.setDirectionMoveAround = function(d) {
+    this._directionMoveAround = d;
 };
 
 Game_CharacterBase.prototype.isTile = function() {
@@ -562,8 +598,15 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
     if (this.isMovementSucceeded()) {
         this.executeMoveStraight(d);
     } else {
-        this.executeLookStraight(d);
+        this.setDirectionMoveAround(this.canMoveAround(this._x, this._y, d));
+        if (this.directionMoveAround()) {
+            this.executeMoveStraight(this.directionMoveAround());
+        } else {
+            this.executeLookStraight(d);
+        }
     }
+
+    this._canMoveAroundChar = true;
 };
 
 Game_CharacterBase.prototype.executeMoveStraight = function(d, moveAmount = $gameSystem.moveAmount) {
@@ -685,4 +728,3 @@ Game_CharacterBase.prototype.endAnimation = function() {
 Game_CharacterBase.prototype.endBalloon = function() {
     this._balloonPlaying = false;
 };
-
