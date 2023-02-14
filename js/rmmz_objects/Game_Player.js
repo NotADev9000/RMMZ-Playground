@@ -232,13 +232,15 @@ Game_Player.prototype.executeEncounter = function() {
     }
 };
 
-Game_Player.prototype.startMapEvent = function(x, y, triggers, normal) {
+Game_Player.prototype.startMapEvent = function(x, y, triggers, normal, checkAlignment = false) {
     if (!$gameMap.isEventRunning()) {
         for (const event of $gameMap.eventsXy(x, y)) {
-            if (
-                event.isTriggerIn(triggers) &&
-                event.isNormalPriority() === normal
-            ) {
+            if (event.isTriggerIn(triggers) && event.isNormalPriority() === normal) {
+                // if player isn't fully aligned with event check if meta tag, allowing touch to occur, is present
+                if (checkAlignment && (this.x !== event.x || this.y !== event.y)) {
+                    if (!event.event().meta.halfTouch) return;
+                }
+
                 event.start();
             }
         }
@@ -507,22 +509,59 @@ Game_Player.prototype.encounterProgressValue = function() {
 
 Game_Player.prototype.checkEventTriggerHere = function(triggers) {
     if (this.canStartLocalEvents()) {
-        this.startMapEvent(this.x, this.y, triggers, false);
+        const positions = this.getCheckPositionsHere(this.x, this.y);
+        for (let i = 0; i < positions[0].length; i++) {
+            this.startMapEvent(positions[0][i], positions[1], triggers, false, true);
+            if ($gameMap.isAnyEventStarting()) return;
+        }
     }
 };
 
 Game_Player.prototype.checkEventTriggerThere = function(triggers) {
     if (this.canStartLocalEvents()) {
         const direction = this.direction();
-        const x1 = this.x;
-        const y1 = this.y;
-        const x2 = $gameMap.roundXWithDirection(x1, direction);
-        const y2 = $gameMap.roundYWithDirection(y1, direction);
-        this.startMapEvent(x2, y2, triggers, true);
-        if (!$gameMap.isAnyEventStarting() && $gameMap.isCounter(x2, y2)) {
-            const x3 = $gameMap.roundXWithDirection(x2, direction);
-            const y3 = $gameMap.roundYWithDirection(y2, direction);
-            this.startMapEvent(x3, y3, triggers, true);
+        const positions = this.getCheckPositions(this.x, this.y, direction, false);
+        const positionsInFront = [[], []];
+        let x2, y2;
+
+        // check spaces 1 tile in front
+        let eventStarting = false;
+        for (let i = 0; i < positions[0].length; i++) {
+            x2 = $gameMap.roundXWithDirection(positions[0][i], direction);
+
+            for (let j = 0; j < positions[1].length; j++) {
+                y2 = $gameMap.roundYWithDirection(positions[1][j], direction);
+                this.startMapEvent(x2, y2, triggers, true);
+
+                if ($gameMap.isAnyEventStarting()) {
+                    eventStarting = true;
+                    break;
+                } else {
+                    // store tiles in front to check for counter tiles later
+                    positionsInFront[0].push(x2);
+                    positionsInFront[1].push(y2);
+                }
+            }
+
+            if (eventStarting) break;
+        }
+
+        // if counter: check spaces 2 tiles in front
+        if (!eventStarting) {
+            let x3, y3;
+
+            for (let k = 0; k < 3; k++) {
+                x2 = positionsInFront[0][k];
+                y2 = positionsInFront[1][k];
+
+                if ($gameMap.isCounter(x2, y2)) {
+                    x3 = $gameMap.roundXWithDirection(x2, direction);
+                    y3 = $gameMap.roundYWithDirection(y2, direction);
+                    this.startMapEvent(x3, y3, triggers, true);
+
+                    if ($gameMap.isAnyEventStarting()) break;
+                }   
+            }
         }
     }
 };
@@ -598,11 +637,9 @@ Game_Player.prototype.isOnDamageFloor = function() {
     return $gameMap.isDamageFloor(this.x, this.y) && !this.isInAirship();
 };
 
-Game_Player.prototype.moveStraight = function(d) {
-    if (this.canPass(this.x, this.y, d)) {
-        this._followers.updateMove();
-    }
-    Game_Character.prototype.moveStraight.call(this, d);
+Game_Player.prototype.executeMoveStraight = function(d) {
+    this._followers.updateMove();
+    Game_Character.prototype.executeMoveStraight.call(this, d);
 };
 
 Game_Player.prototype.moveDiagonally = function(horz, vert) {

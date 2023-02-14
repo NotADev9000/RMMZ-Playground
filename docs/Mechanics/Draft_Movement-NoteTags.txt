@@ -1,0 +1,5 @@
+<halfTouch>
+runs the event on player touch even if player isn't fully aligned with event.
+
+<moveAround>
+when walking into char from below or above and slightly aligned, the player will move around them if space is available.

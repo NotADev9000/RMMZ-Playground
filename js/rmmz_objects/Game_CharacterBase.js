@@ -37,6 +37,8 @@ Game_CharacterBase.prototype.initMembers = function() {
     this._opacity = 255;
     this._blendMode = 0;
     this._direction = 2;
+    this._directionMoveAround = 2;
+    this._canMoveAroundChar = true;
     this._pattern = 1;
     this._priorityType = 1;
     this._tileId = 0;
@@ -164,22 +166,78 @@ Game_CharacterBase.prototype.reverseDir = function(d) {
     return 10 - d;
 };
 
+/**
+ * gets co-ordinates under the character needed to check for below events 
+ */
+Game_CharacterBase.prototype.getCheckPositionsHere = function(x, y) {
+    resultX = [x]; resultY = y;
+    if ($gameSystem.useAltMovement) {
+        const moveAmount = $gameSystem.moveAmount;
+
+        if (!Number.isInteger(x)) {
+            resultX.pop();
+            resultX.push(x - moveAmount, x + moveAmount);
+        }
+        if (!Number.isInteger(y)) {
+            resultY += moveAmount;
+        }
+    }
+
+    return [resultX, resultY];
+};
+
+/**
+ * gets co-ordinates surrounding the character needed to check for tiles and/or events
+ * 
+ * @returns {array} x and y positions, each are arrays that hold multiple co-ordinates
+ */
+Game_CharacterBase.prototype.getCheckPositions = function(x, y, d, tileCheck = true) {
+    x = [x]; y = [y];
+    if ($gameSystem.useAltMovement) {
+        const moveAmount = $gameSystem.moveAmount;
+        let coords1, coords2, round;
+
+        switch (d) {
+            case 2:
+                coords1 = y; coords2 = x;
+                round = Math.floor;
+                break;
+            case 4:
+                coords1 = x; coords2 = y;
+                round = Math.ceil;
+                break;
+            case 6:
+                coords1 = x; coords2 = y;
+                round = Math.floor;
+                break;
+            default: // 8
+                coords1 = y; coords2 = x;
+                round = Math.ceil;
+                break;
+        }
+
+        // coords1 & 2 are set to x & y above meaning changes below overwrite the x & y variables
+        if (tileCheck && !Number.isInteger(coords1[0])) coords1.unshift(round(coords1[0]));
+        const orignalCoord = coords2[0];
+        coords2.unshift(orignalCoord - moveAmount);
+        coords2.push(orignalCoord + moveAmount);
+    }
+    
+    return [x, y];
+};
+
 Game_CharacterBase.prototype.canPass = function(x, y, d) {
-    const x2 = $gameMap.roundXWithDirection(x, d);
-    const y2 = $gameMap.roundYWithDirection(y, d);
-    if (!$gameMap.isValid(x2, y2)) {
-        return false;
+    const positions = this.getCheckPositions(x, y, d);
+    let result = true;
+
+    for (let i = 0; i < positions[0].length; i++) {
+        for (let j = 0; j < positions[1].length; j++) {
+            result = this.executeCanPass(positions[0][i], positions[1][j], d);
+            if (!result) return result;
+        }
     }
-    if (this.isThrough() || this.isDebugThrough()) {
-        return true;
-    }
-    if (!this.isMapPassable(x, y, d)) {
-        return false;
-    }
-    if (this.isCollidedWithCharacters(x2, y2)) {
-        return false;
-    }
-    return true;
+
+    return result;
 };
 
 Game_CharacterBase.prototype.canPassDiagonally = function(x, y, horz, vert) {
@@ -192,6 +250,47 @@ Game_CharacterBase.prototype.canPassDiagonally = function(x, y, horz, vert) {
         return true;
     }
     return false;
+};
+
+Game_CharacterBase.prototype.canMoveAround = function(x, y, d) {
+    if (this._canMoveAroundChar && (d === 2 || d === 8)) {
+        const moveAmount = $gameSystem.moveAmount;
+        let x2, y2;
+        if (this.canPass(x, y, 4)) {
+            x2 = $gameMap.roundXWithDirection(x, 4, moveAmount);
+            y2 = $gameMap.roundYWithDirection(y, 4, moveAmount);
+            if (this.canPass(x2, y2, d)) return 4;
+        }
+        
+        if (this.canPass(x, y, 6)) {
+            x2 = $gameMap.roundXWithDirection(x, 6, moveAmount);
+            y2 = $gameMap.roundYWithDirection(y, 6, moveAmount);
+            if (this.canPass(x2, y2, d)) return 6;
+        }
+    }
+
+    return 0;
+};
+
+Game_CharacterBase.prototype.executeCanPass = function(x, y, d) {
+    const checkTiles = Number.isInteger(x) && Number.isInteger(y);
+    const x2 = $gameMap.roundXWithDirection(x, d);
+    const y2 = $gameMap.roundYWithDirection(y, d);
+
+    if (checkTiles && !$gameMap.isValid(x2, y2)) {
+        return false;
+    }
+    if (this.isThrough() || this.isDebugThrough()) {
+        return true;
+    }
+    if (checkTiles && !this.isMapPassable(x, y, d)) {
+        return false;
+    }
+    if (this.isCollidedWithCharacters(x2, y2)) {
+        this.updateCanMoveAroundChar(x2, y2);
+        return false;
+    }
+    return true;
 };
 
 Game_CharacterBase.prototype.isMapPassable = function(x, y, d) {
@@ -212,6 +311,11 @@ Game_CharacterBase.prototype.isCollidedWithEvents = function(x, y) {
 
 Game_CharacterBase.prototype.isCollidedWithVehicles = function(x, y) {
     return $gameMap.boat().posNt(x, y) || $gameMap.ship().posNt(x, y);
+};
+
+Game_CharacterBase.prototype.updateCanMoveAroundChar = function(x, y) {
+    const meta = $gameMap.eventMetaXy(x, y);
+    if (meta) this._canMoveAroundChar = this._canMoveAroundChar && meta.moveAround;
 };
 
 Game_CharacterBase.prototype.setPosition = function(x, y) {
@@ -246,6 +350,14 @@ Game_CharacterBase.prototype.setDirection = function(d) {
     this.resetStopCount();
 };
 
+Game_CharacterBase.prototype.directionMoveAround = function() {
+    return this._directionMoveAround;
+};
+
+Game_CharacterBase.prototype.setDirectionMoveAround = function(d) {
+    this._directionMoveAround = d;
+};
+
 Game_CharacterBase.prototype.isTile = function() {
     return this._tileId > 0 && this._priorityType === 0;
 };
@@ -255,7 +367,7 @@ Game_CharacterBase.prototype.isObjectCharacter = function() {
 };
 
 Game_CharacterBase.prototype.shiftY = function() {
-    return this.isObjectCharacter() ? 0 : 6;
+    return this.isObjectCharacter() ? 0 : 0;
 };
 
 Game_CharacterBase.prototype.scrolledX = function() {
@@ -403,19 +515,19 @@ Game_CharacterBase.prototype.refreshBushDepth = function() {
 };
 
 Game_CharacterBase.prototype.isOnLadder = function() {
-    return $gameMap.isLadder(this._x, this._y);
+    return $gameMap.isLadder(Math.ceil(this._x), Math.ceil(this._y));
 };
 
 Game_CharacterBase.prototype.isOnBush = function() {
-    return $gameMap.isBush(this._x, this._y);
+    return $gameMap.isBush(Math.ceil(this._x), Math.ceil(this._y));
 };
 
 Game_CharacterBase.prototype.terrainTag = function() {
-    return $gameMap.terrainTag(this._x, this._y);
+    return $gameMap.terrainTag(Math.ceil(this._x), Math.ceil(this._y));
 };
 
 Game_CharacterBase.prototype.regionId = function() {
-    return $gameMap.regionId(this._x, this._y);
+    return $gameMap.regionId(Math.ceil(this._x), Math.ceil(this._y));
 };
 
 Game_CharacterBase.prototype.increaseSteps = function() {
@@ -456,9 +568,17 @@ Game_CharacterBase.prototype.setTileImage = function(tileId) {
 };
 
 Game_CharacterBase.prototype.checkEventTriggerTouchFront = function(d) {
-    const x2 = $gameMap.roundXWithDirection(this._x, d);
-    const y2 = $gameMap.roundYWithDirection(this._y, d);
-    this.checkEventTriggerTouch(x2, y2);
+    const positions = this.getCheckPositions(this._x, this._y, d, false);
+    let x2, y2;
+
+    for (let i = 0; i < positions[0].length; i++) {
+        x2 = $gameMap.roundXWithDirection(positions[0][i], d);
+        for (let j = 0; j < positions[1].length; j++) {
+            y2 = $gameMap.roundYWithDirection(positions[1][j], d);
+            this.checkEventTriggerTouch(x2, y2);
+            if ($gameMap.isAnyEventStarting()) return;
+        }
+    }
 };
 
 Game_CharacterBase.prototype.checkEventTriggerTouch = function(/*x, y*/) {
@@ -476,16 +596,31 @@ Game_CharacterBase.prototype.setMovementSuccess = function(success) {
 Game_CharacterBase.prototype.moveStraight = function(d) {
     this.setMovementSuccess(this.canPass(this._x, this._y, d));
     if (this.isMovementSucceeded()) {
-        this.setDirection(d);
-        this._x = $gameMap.roundXWithDirection(this._x, d);
-        this._y = $gameMap.roundYWithDirection(this._y, d);
-        this._realX = $gameMap.xWithDirection(this._x, this.reverseDir(d));
-        this._realY = $gameMap.yWithDirection(this._y, this.reverseDir(d));
-        this.increaseSteps();
+        this.executeMoveStraight(d);
     } else {
-        this.setDirection(d);
-        this.checkEventTriggerTouchFront(d);
+        this.setDirectionMoveAround(this.canMoveAround(this._x, this._y, d));
+        if (this.directionMoveAround()) {
+            this.executeMoveStraight(this.directionMoveAround());
+        } else {
+            this.executeLookStraight(d);
+        }
     }
+
+    this._canMoveAroundChar = true;
+};
+
+Game_CharacterBase.prototype.executeMoveStraight = function(d, moveAmount = $gameSystem.moveAmount) {
+    this.setDirection(d);
+    this._x = $gameMap.roundXWithDirection(this._x, d, moveAmount);
+    this._y = $gameMap.roundYWithDirection(this._y, d, moveAmount);
+    this._realX = $gameMap.xWithDirection(this._x, this.reverseDir(d), moveAmount);
+    this._realY = $gameMap.yWithDirection(this._y, this.reverseDir(d), moveAmount);
+    this.increaseSteps();
+};
+
+Game_CharacterBase.prototype.executeLookStraight = function(d) {
+    this.setDirection(d);
+    this.checkEventTriggerTouchFront(d);
 };
 
 Game_CharacterBase.prototype.moveDiagonally = function(horz, vert) {
@@ -593,4 +728,3 @@ Game_CharacterBase.prototype.endAnimation = function() {
 Game_CharacterBase.prototype.endBalloon = function() {
     this._balloonPlaying = false;
 };
-
