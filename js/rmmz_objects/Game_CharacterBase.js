@@ -593,20 +593,26 @@ Game_CharacterBase.prototype.setMovementSuccess = function(success) {
     this._movementSuccess = success;
 };
 
-Game_CharacterBase.prototype.moveStraight = function(d) {
+Game_CharacterBase.prototype.moveStraight = function(d, moveAround = $gameSystem.useAltMovement) {
     this.setMovementSuccess(this.canPass(this._x, this._y, d));
     if (this.isMovementSucceeded()) {
         this.executeMoveStraight(d);
+    } else if (moveAround) {
+        this.moveAround(d);
     } else {
-        this.setDirectionMoveAround(this.canMoveAround(this._x, this._y, d));
-        if (this.directionMoveAround()) {
-            this.executeMoveStraight(this.directionMoveAround());
-        } else {
-            this.executeLookStraight(d);
-        }
+        this.executeLookStraight(d);
     }
 
     this._canMoveAroundChar = true;
+};
+
+Game_CharacterBase.prototype.moveAround = function(d) {
+    this.setDirectionMoveAround(this.canMoveAround(this._x, this._y, d));
+    if (this.directionMoveAround()) {
+        this.executeMoveStraight(this.directionMoveAround());
+    } else {
+        this.executeLookStraight(d);
+    }
 };
 
 Game_CharacterBase.prototype.executeMoveStraight = function(d, moveAmount = $gameSystem.moveAmount) {

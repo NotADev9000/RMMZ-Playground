@@ -290,14 +290,14 @@ Game_Character.prototype.moveTowardCharacter = function(character) {
     const sx = this.deltaXFrom(character.x);
     const sy = this.deltaYFrom(character.y);
     if (Math.abs(sx) > Math.abs(sy)) {
-        this.moveStraight(sx > 0 ? 4 : 6);
+        this.moveStraight(sx > 0 ? 4 : 6, false);
         if (!this.isMovementSucceeded() && sy !== 0) {
-            this.moveStraight(sy > 0 ? 8 : 2);
+            this.moveStraight(sy > 0 ? 8 : 2, false);
         }
     } else if (sy !== 0) {
-        this.moveStraight(sy > 0 ? 8 : 2);
+        this.moveStraight(sy > 0 ? 8 : 2, false);
         if (!this.isMovementSucceeded() && sx !== 0) {
-            this.moveStraight(sx > 0 ? 4 : 6);
+            this.moveStraight(sx > 0 ? 4 : 6, false);
         }
     }
 };
@@ -306,14 +306,14 @@ Game_Character.prototype.moveAwayFromCharacter = function(character) {
     const sx = this.deltaXFrom(character.x);
     const sy = this.deltaYFrom(character.y);
     if (Math.abs(sx) > Math.abs(sy)) {
-        this.moveStraight(sx > 0 ? 6 : 4);
+        this.moveStraight(sx > 0 ? 6 : 4), false;
         if (!this.isMovementSucceeded() && sy !== 0) {
-            this.moveStraight(sy > 0 ? 2 : 8);
+            this.moveStraight(sy > 0 ? 2 : 8), false;
         }
     } else if (sy !== 0) {
-        this.moveStraight(sy > 0 ? 2 : 8);
+        this.moveStraight(sy > 0 ? 2 : 8), false;
         if (!this.isMovementSucceeded() && sx !== 0) {
-            this.moveStraight(sx > 0 ? 6 : 4);
+            this.moveStraight(sx > 0 ? 6 : 4), false;
         }
     }
 };
@@ -494,10 +494,12 @@ Game_Character.prototype.findDirectionTo = function(goalX, goalY) {
             continue;
         }
 
+        const moveAmount = $gameSystem.moveAmount;
+
         for (let j = 0; j < 4; j++) {
             const direction = 2 + j * 2;
-            const x2 = $gameMap.roundXWithDirection(x1, direction);
-            const y2 = $gameMap.roundYWithDirection(y1, direction);
+            const x2 = $gameMap.roundXWithDirection(x1, direction, moveAmount);
+            const y2 = $gameMap.roundYWithDirection(y1, direction, moveAmount);
             const pos2 = y2 * mapWidth + x2;
 
             if (closedList.includes(pos2)) {
