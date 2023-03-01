@@ -84,7 +84,7 @@ Game_Event.prototype.updateStop = function() {
         this.resetStopCount();
     }
     Game_Character.prototype.updateStop.call(this);
-    if (!this.isMoveRouteForcing()) {
+    if (!this.chase() && !this.isMoveRouteForcing()) {
         this.updateSelfMovement();
     }
 };

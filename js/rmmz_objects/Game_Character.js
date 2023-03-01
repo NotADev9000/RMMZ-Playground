@@ -69,6 +69,76 @@ Game_Character.prototype.initMembers = function() {
     this._originalMoveRoute = null;
     this._originalMoveRouteIndex = 0;
     this._waitCount = 0;
+    this._target = null;
+    this._targetX = null;
+    this._targetY = null;
+    this._chase = false;
+};
+
+Game_Character.prototype.target = function() {
+    return this._target;
+};
+
+Game_Character.prototype.setTargetX = function(x) {
+    this._targetX = x;
+};
+
+Game_Character.prototype.setTargetY = function(y) {
+    this._targetY = y;
+};
+
+Game_Character.prototype.setTargetPos = function(x, y) {
+    this.setTargetX(x);
+    this.setTargetY(y);
+};
+
+Game_Character.prototype.setTargetByCharacter = function(target) {
+    this._target = target;
+    this.setTargetPos(target.x, target.y);
+};
+
+Game_Character.prototype.setTargetById = function(id) {
+    const character = $gameMap.event(id);
+    if (character) this.setTargetByCharacter(character);
+};
+
+Game_Character.prototype.setTargetByPos = function(x, y) {
+    this._target = null;
+    this.setTargetPos(x, y);
+};
+
+Game_Character.prototype.setTargetByPlayer = function() {
+    this._target = $gamePlayer;
+    this.setTargetPos($gamePlayer.x, $gamePlayer.y);
+};
+
+Game_Character.prototype.updateTargetPos = function() {
+    if (this._target) this.setTargetPos(this._target.x, this._target.y);
+};
+
+Game_Character.prototype.resetTarget = function() {
+    this._target = null;
+};
+
+Game_Character.prototype.resetTargetPos = function() {
+    this.setTargetPos(null, null);
+};
+
+Game_Character.prototype.resetAllTargets = function() {
+    this.resetTarget();
+    this.resetTargetPos();
+};
+
+Game_Character.prototype.chase = function() {
+    return this._chase;
+};
+
+Game_Character.prototype.setChase = function(chase) {
+    this._chase = chase;
+};
+
+Game_Character.prototype.hasValidTargets = function() {
+    return this._targetX >= 0 && this._targetY >= 0;
 };
 
 Game_Character.prototype.memorizeMoveRoute = function() {
@@ -108,8 +178,18 @@ Game_Character.prototype.forceMoveRoute = function(moveRoute) {
 
 Game_Character.prototype.updateStop = function() {
     Game_CharacterBase.prototype.updateStop.call(this);
-    if (this._moveRouteForcing) {
+    if (this._chase) {
+        this.updateChase();
+    } else if (this._moveRouteForcing) {
         this.updateRoutineMove();
+    }
+};
+
+Game_Character.prototype.updateChase = function() {
+    this.updateTargetPos();
+    if (this.hasValidTargets()) {
+        const direction = this.findDirectionTo(this._targetX, this._targetY);
+        this.moveStraight(direction, false);
     }
 };
 
