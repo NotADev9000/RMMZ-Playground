@@ -1,0 +1,21 @@
+== Objects that are displayed on the map with a sprite. These classes handle all related information such as, position, sprites, movement, interaction, collision and movement.
+
+Char_Base:
+- X/Y: Unit = Tiles
+How far char is from edge (left/top) of screen.
+When moving: for each movement step (1 tile or 0.5 tiles) this represents where the character is going to be.
+When still: equal to RealX/Y
+e.g. if x = 6 & char moves left once, x immediately goes to 5.5 (w/ altMovement)
+
+- RealX/Y: Unit = Tiles
+How far char is from edge (left/top) of screen.
+When moving: represents where the sprite is. if this value != X/Y, each frame it will change towards X/Y depending on the chars movement speed.
+When still: equal to X/Y
+e.g. if X = 6 and RealX = 7, each frame RealX will decrease until it gets <= X. If RealX goes below X, it will be set to X.
+
+- ScrolledX/Y: Unit = Tiles
+How far char is from edge (left/top) of screen.
+This includes the non-game areas for maps that are smaller than screen size.
+
+- ScreenX/Y: Unit = Pixels
+How far char is from edge (left/top) of screen to the center(x)/bottom(y) of the char.
