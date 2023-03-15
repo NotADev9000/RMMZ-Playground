@@ -216,6 +216,14 @@ Game_Map.prototype.addHurtBox = function(hurtBox) {
     this._collisionAreas[0].push(hurtBox);
 };
 
+Game_Map.prototype.collisionsHurt = function() {
+    return this._collisionAreas[0];
+};
+
+Game_Map.prototype.collisionsHit = function() {
+    return this._collisionAreas[1];
+};
+
 Game_Map.prototype.setupScroll = function() {
     this._scrollDirection = 2;
     this._scrollRest = 0;
