@@ -94,12 +94,9 @@ Sprite_Collision.prototype.updatePosition = function() {
 };
 
 Sprite_Collision.prototype.getColor = function() {
-    const col = this._collisionArea;
-    if (this._isHurtBox) {
-        return col._active ? ColorManager.hurtBoxActiveColor() : ColorManager.hurtBoxInactiveColor();
-    } else {
-        return col._active ? ColorManager.hitBoxActiveColor() : ColorManager.hitBoxInactiveColor();
-    }
+    const boxText = this._isHurtBox ? 'hurt' : 'hit';
+    const activeText = this._collisionArea._active ? 'Active' : 'Inactive';
+    return ColorManager[`${boxText}Box${activeText}Color`]();
 };
 
 // #endregion

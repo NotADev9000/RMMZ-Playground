@@ -52,6 +52,14 @@ Window_Base.prototype.fittingHeight = function(numLines) {
     return allItemsHeight + padding;
 };
 
+/**
+ * can be called when initializing window to calculate width
+ */
+Window_Base.prototype.fittingWidth = function(centerWidth) {
+    const padding = this.allPaddingX() * 2;
+    return centerWidth + padding;
+};
+
 // #endregion
 
 //------------------
@@ -102,6 +110,10 @@ Window_Base.prototype.positionPaddingX = function() {
 
 Window_Base.prototype.positionPaddingY = function() {
     return $gameSystem.positionPaddingY();
+};
+
+Window_Base.prototype.allPaddingX = function() {
+    return this.framePadding() + this.positionPaddingX();
 };
 
 Window_Base.prototype.allPaddingY = function() {

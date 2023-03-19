@@ -5,5 +5,6 @@ var $plugins =
 {"name":"CC_FontTexture","status":true,"description":"Pixel perfect bitmap fonts using a texture","parameters":{"fonts":"[\"{\\\"name\\\":\\\"rmmz-mainfont\\\",\\\"texture\\\":\\\"Font_MS_Gothic-Shadow-Gradient\\\",\\\"data\\\":\\\"MS_Gothic.json\\\"}\"]","override":"","sizeSpriteDamage":"0","fontSpriteDamage":"","sizeSpriteGaugeLabel":"0","fontSpriteGaugeLabel":"","sizeSpriteGaugeValue":"0","fontSpriteGaugeValue":"","sizeSpriteName":"0","fontSpriteName":"","sizeSpriteTimer":"0","fontSpriteTimer":"","clip":"true","clipOverflowLeft":"2","clipOverflowRight":"2","clipOverflowTop":"2","clipOverflowBottom":"2","debug":"false"}},
 {"name":"Debug_Data","status":true,"description":"Holds various data for debugging","parameters":{}},
 {"name":"Debug_Draw_Collisions","status":true,"description":"Draws collision areas to screen.","parameters":{}},
+{"name":"Debug_Menu","status":true,"description":"Creates a menu on the map scene to control debug options","parameters":{}},
 {"name":"Plugin_Commands","status":true,"description":"All plugin commands for interacting with the engine","parameters":{}}
 ];

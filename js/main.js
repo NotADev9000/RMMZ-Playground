@@ -123,6 +123,7 @@ const scriptUrls = [
     "js/rmmz_windows/Window_Selectable.js",
     "js/rmmz_windows/Window_Command.js",
     "js/rmmz_windows/Window_HorzCommand.js",
+    "js/rmmz_windows/Window_Command_Modular.js",
     "js/rmmz_windows/Window_Help.js",
     "js/rmmz_windows/Window_Gold.js",
     "js/rmmz_windows/Window_StatusBase.js",
