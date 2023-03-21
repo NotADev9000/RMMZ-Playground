@@ -743,9 +743,16 @@ Game_CharacterBase.prototype.collisionsHit = function() {
     return this._collisionsHit;
 };
 
-Game_CharacterBase.prototype.createHurtBox = function(addToMap = false) {
-    const hurtBox = new Game_CollisionHurt(0, 0, 0, 0, this);
+Game_CharacterBase.prototype.createHurtbox = function(addToMap = false) {
+    const hurtbox = new Game_CollisionHurt(0, 0, 0, 0, this);
 
-    this._collisionsHurt.push(hurtBox);
-    if (addToMap) $gameMap.addHurtBox(hurtBox);
+    this._collisionsHurt.push(hurtbox);
+    if (addToMap) $gameMap.addHurtbox(hurtbox);
+};
+
+Game_CharacterBase.prototype.createHitbox = function(addToMap = false) {
+    const hitbox = new Game_CollisionHit(0, 0, 0, 0, this);
+
+    this._collisionsHit.push(hitbox);
+    if (addToMap) $gameMap.addHitbox(hitbox);
 };

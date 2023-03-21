@@ -15,7 +15,6 @@ Game_Map.prototype.initialize = function() {
     this._events = [];
     this._commonEvents = [];
     this._vehicles = [];
-    this._collisionAreas = [];
     this._displayX = 0;
     this._displayY = 0;
     this._nameDisplay = true;
@@ -45,7 +44,7 @@ Game_Map.prototype.setup = function(mapId) {
     this._displayY = 0;
     this.refereshVehicles();
     this.setupEvents();
-    this.setupCollisions();
+    CollisionManager.setupCollisions();
     this.setupScroll();
     this.setupParallax();
     this.setupBattleback();
@@ -191,37 +190,6 @@ Game_Map.prototype.parallelCommonEvents = function() {
     return $dataCommonEvents.filter(
         commonEvent => commonEvent && commonEvent.trigger === 2
     );
-};
-
-Game_Map.prototype.setupCollisions = function() {
-    this._collisionAreas = [[], []];
-
-    // player
-    for (const hurtBox of $gamePlayer.collisionsHurt()) {
-        this.addHurtBox(hurtBox);
-    }
-    // events
-    for (const event of this.events()) {
-        for (const hurtBox of event.collisionsHurt()) {
-            this.addHurtBox(hurtBox);
-        }
-    }
-};
-
-Game_Map.prototype.addHurtBox = function(hurtBox) {
-    if (!(hurtBox instanceof Game_CollisionHurt)) {
-        console.warn("Tried to add non-hurtBox to Map's list of hurtBoxes: hurtBox NOT added.")
-        return;
-    }
-    this._collisionAreas[0].push(hurtBox);
-};
-
-Game_Map.prototype.collisionsHurt = function() {
-    return this._collisionAreas[0];
-};
-
-Game_Map.prototype.collisionsHit = function() {
-    return this._collisionAreas[1];
 };
 
 Game_Map.prototype.setupScroll = function() {

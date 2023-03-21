@@ -146,17 +146,17 @@ Window_Debug_Collisions.prototype.getConfigValue = function(symbol) {
         case Window_Debug_Collisions.COMMAND.DRAW_COLLISION_AREA:
             return $debugData._drawCollisionAreas;
         case Window_Debug_Collisions.COMMAND.DRAW_HURTBOXES:
-            return $debugData._drawHurtBoxes;
+            return $debugData._drawHurtboxes;
         case Window_Debug_Collisions.COMMAND.DRAW_INACTIVE_HURTBOXES:
-            return $debugData._drawInactiveHurtBoxes;
+            return $debugData._drawInactiveHurtboxes;
         case Window_Debug_Collisions.COMMAND.DRAW_ACTIVE_HURTBOXES:
-            return $debugData._drawActiveHurtBoxes;
+            return $debugData._drawActiveHurtboxes;
         case Window_Debug_Collisions.COMMAND.DRAW_HITBOXES:
-            return $debugData._drawHitBoxes;
+            return $debugData._drawHitboxes;
         case Window_Debug_Collisions.COMMAND.DRAW_INACTIVE_HITBOXES:
-            return $debugData._drawInactiveHitBoxes;
+            return $debugData._drawInactiveHitboxes;
         case Window_Debug_Collisions.COMMAND.DRAW_ACTIVE_HITBOXES:
-            return $debugData._drawActiveHitBoxes;
+            return $debugData._drawActiveHitboxes;
         default:
             return true;
     }
@@ -168,22 +168,22 @@ Window_Debug_Collisions.prototype.setConfigValue = function(symbol, value) {
             $debugData._drawCollisionAreas = value;
             break;
         case Window_Debug_Collisions.COMMAND.DRAW_HURTBOXES:
-            $debugData._drawHurtBoxes = value;
+            $debugData._drawHurtboxes = value;
             break;
         case Window_Debug_Collisions.COMMAND.DRAW_INACTIVE_HURTBOXES:
-            $debugData._drawInactiveHurtBoxes = value;
+            $debugData._drawInactiveHurtboxes = value;
             break;
         case Window_Debug_Collisions.COMMAND.DRAW_ACTIVE_HURTBOXES:
-            $debugData._drawActiveHurtBoxes = value;
+            $debugData._drawActiveHurtboxes = value;
             break;
         case Window_Debug_Collisions.COMMAND.DRAW_HITBOXES:
-            $debugData._drawHitBoxes = value;
+            $debugData._drawHitboxes = value;
             break;
         case Window_Debug_Collisions.COMMAND.DRAW_INACTIVE_HITBOXES:
-            $debugData._drawInactiveHitBoxes = value;
+            $debugData._drawInactiveHitboxes = value;
             break;
         case Window_Debug_Collisions.COMMAND.DRAW_ACTIVE_HITBOXES:
-            $debugData._drawActiveHitBoxes = value;
+            $debugData._drawActiveHitboxes = value;
             break;
         default:
             break;

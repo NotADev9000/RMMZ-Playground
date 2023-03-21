@@ -37,12 +37,12 @@ function Debug_Data() {
 
 Debug_Data.prototype.initialize = function() {
     this._drawCollisionAreas = true;
-    this._drawHurtBoxes = true;
-    this._drawInactiveHurtBoxes = true;
-    this._drawActiveHurtBoxes = true;
-    this._drawHitBoxes = true;
-    this._drawInactiveHitBoxes = true;
-    this._drawActiveHitBoxes = true;
+    this._drawHurtboxes = true;
+    this._drawInactiveHurtboxes = true;
+    this._drawActiveHurtboxes = true;
+    this._drawHitboxes = true;
+    this._drawInactiveHitboxes = true;
+    this._drawActiveHitboxes = true;
 };
 
 // #endregion

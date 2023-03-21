@@ -41,6 +41,7 @@ const scriptUrls = [
     "js/rmmz_managers/SceneManager.js",
     "js/rmmz_managers/BattleManager.js",
     "js/rmmz_managers/PluginManager.js",
+    "js/rmmz_managers/CollisionManager.js",
     "js/rmmz_objects/Game_Temp.js",
     "js/rmmz_objects/Game_System.js",
     "js/rmmz_objects/Game_Timer.js",

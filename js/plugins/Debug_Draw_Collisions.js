@@ -12,8 +12,8 @@
 
 Spriteset_Map.prototype.createUpperLayer = function() {
     this.createCollisions();
-    this.createHurtBoxes();
-    // hitBoxes here...
+    this.createHurtboxes();
+    // hitboxes here...
     Spriteset_Base.prototype.createUpperLayer.call(this);
 };
 
@@ -23,9 +23,9 @@ Spriteset_Map.prototype.createCollisions = function() {
     this._tilemap.addChild(this._collisionsContainer);
 };
 
-Spriteset_Map.prototype.createHurtBoxes = function() {
-    for (const hurtBox of $gameMap.collisionsHurt()) {
-        const sprite = new Sprite_Collision(hurtBox);
+Spriteset_Map.prototype.createHurtboxes = function() {
+    for (const hurtbox of CollisionManager.collisionsHurt()) {
+        const sprite = new Sprite_Collision(hurtbox);
         sprite.bitmap = new Bitmap(0, 0);
         this._collisionsContainer.addChild(sprite);
     }
@@ -55,17 +55,17 @@ Sprite_Collision.prototype.initialize = function(area) {
 
 Sprite_Collision.prototype.initMembers = function(area) {
     this._collisionArea = area;
-    this._isHurtBox = area instanceof Game_CollisionHurt;
+    this._isHurtbox = area instanceof Game_CollisionHurt;
 };
 
 Sprite_Collision.prototype.update = function() {
-    const hurt = this._isHurtBox;
+    const hurt = this._isHurtbox;
     let show = $debugData._drawCollisionAreas;
-    show = show && (hurt ? $debugData._drawHurtBoxes : $debugData._drawHitBoxes);
+    show = show && (hurt ? $debugData._drawHurtboxes : $debugData._drawHitboxes);
     if (hurt) {
-        show = show && (this._collisionArea._active ? $debugData._drawActiveHurtBoxes : $debugData._drawInactiveHurtBoxes);
+        show = show && (this._collisionArea._active ? $debugData._drawActiveHurtboxes : $debugData._drawInactiveHurtboxes);
     } else {
-        show = show && (this._collisionArea._active ? $debugData._drawActiveHitBoxes : $debugData._drawInactiveHitBoxes);
+        show = show && (this._collisionArea._active ? $debugData._drawActiveHitboxes : $debugData._drawInactiveHitboxes);
     }
 
     if (!show) {
@@ -94,9 +94,9 @@ Sprite_Collision.prototype.updatePosition = function() {
 };
 
 Sprite_Collision.prototype.getColor = function() {
-    const boxText = this._isHurtBox ? 'hurt' : 'hit';
+    const boxText = this._isHurtbox ? 'hurt' : 'hit';
     const activeText = this._collisionArea._active ? 'Active' : 'Inactive';
-    return ColorManager[`${boxText}Box${activeText}Color`]();
+    return ColorManager[`${boxText}box${activeText}Color`]();
 };
 
 // #endregion
@@ -105,19 +105,19 @@ Sprite_Collision.prototype.getColor = function() {
 // #region ColorManager
 //------------------
 
-ColorManager.hurtBoxActiveColor = function() {
+ColorManager.hurtboxActiveColor = function() {
     return "rgba(0, 225, 60, 0.75)";
 };
 
-ColorManager.hurtBoxInactiveColor = function() {
+ColorManager.hurtboxInactiveColor = function() {
     return "rgba(0, 60, 225, 0.75)";
 };
 
-ColorManager.hitBoxActiveColor = function() {
+ColorManager.hitboxActiveColor = function() {
     return "rgba(225, 20, 0, 0.75)";
 };
 
-ColorManager.hitBoxInactiveColor = function() {
+ColorManager.hitboxInactiveColor = function() {
     return "rgba(225, 200, 0, 0.75)";
 };
 

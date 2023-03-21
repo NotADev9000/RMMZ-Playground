@@ -14,7 +14,8 @@ Game_Player.prototype.constructor = Game_Player;
 Game_Player.prototype.initialize = function() {
     Game_Character.prototype.initialize.call(this);
     this.setTransparent($dataSystem.optTransparent);
-    this.initHurtBoxes();
+    this.initHurtboxes();
+    this.initHitboxes();
 };
 
 Game_Player.prototype.initMembers = function() {
@@ -34,14 +35,18 @@ Game_Player.prototype.initMembers = function() {
     this._encounterCount = 0;
 };
 
-Game_Player.prototype.initHurtBoxes = function() {
-    this.createHurtBox();
+Game_Player.prototype.initHurtboxes = function() {
+    this.createHurtbox();
 
     // temp
     this._collisionsHurt[0]._xOffset = -5;
     this._collisionsHurt[0]._yOffset = -14;
     this._collisionsHurt[0]._width = 10;
     this._collisionsHurt[0]._height = 12;
+};
+
+Game_Player.prototype.initHitboxes = function() {
+    // none for now...
 };
 
 Game_Player.prototype.clearTransferInfo = function() {
