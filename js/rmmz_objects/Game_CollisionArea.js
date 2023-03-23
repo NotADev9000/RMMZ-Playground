@@ -16,7 +16,7 @@ Object.defineProperties(Game_CollisionArea.prototype, {
                 return this._owner.screenX() + this._xOffset;
             }
 
-            return 0;
+            return this._xOffset;
         },
         configurable: true
     },
@@ -26,7 +26,7 @@ Object.defineProperties(Game_CollisionArea.prototype, {
                 return this._owner.screenY() + this._yOffset;
             }
 
-            return 0;
+            return this._yOffset;
         },
         configurable: true
     }
@@ -44,3 +44,10 @@ Game_CollisionArea.prototype.initialize = function(xOffset = 0, yOffset = 0, wid
     // tag/layer to determine which collisions to ignore
 };
 
+Game_CollisionArea.prototype.endX = function() {
+    return this.x + (this._width - 1);
+};
+
+Game_CollisionArea.prototype.endY = function() {
+    return this.y + (this._height - 1);
+};

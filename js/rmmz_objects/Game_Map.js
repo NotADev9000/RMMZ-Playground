@@ -647,6 +647,7 @@ Game_Map.prototype.update = function(sceneActive) {
     this.updateScroll();
     this.updateEvents();
     this.updateVehicles();
+    CollisionManager.update();
     this.updateParallax();
 };
 

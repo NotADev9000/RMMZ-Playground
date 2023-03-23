@@ -73,7 +73,7 @@ const scriptUrls = [
     "js/rmmz_objects/Game_Event.js",
     "js/rmmz_objects/Game_CollisionArea.js",
     "js/rmmz_objects/Game_CollisionHurt.js",
-    // "js/rmmz_objects/Game_CollisionHit.js",
+    "js/rmmz_objects/Game_CollisionHit.js",
     "js/rmmz_objects/Game_Interpreter.js",
     "js/rmmz_scenes/Scene_Base.js",
     "js/rmmz_scenes/Scene_Boot.js",

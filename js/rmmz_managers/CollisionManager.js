@@ -49,12 +49,17 @@ CollisionManager.setupHitboxes = function() {
             this.addHitbox(hitbox);
         }
     }
+    // DEBUGGING
+    this.addHitbox(
+        new Game_CollisionHit(8, -16, 8, 16, $gameMap.events()[2])
+    );
+    this._collisionAreas[1][0]._active = true;
 };
 
 // #endregion
 
 //------------------
-// #region Manipulate Collisions
+// #region Collision Storing
 //------------------
 
 CollisionManager.collisionsHurt = function() {
@@ -78,7 +83,45 @@ CollisionManager.addHitbox = function(hitbox) {
         console.warn("Tried to add non-hitbox to Map's list of hitboxes: hitbox NOT added.")
         return;
     }
-    this._collisionAreas[0].push(hitbox);
+    this._collisionAreas[1].push(hitbox);
+};
+
+// #endregion
+
+//------------------
+// #region Collision Mechanics
+//------------------
+
+CollisionManager.update = function() {
+    for (const hitbox of this.collisionsHit()) {
+        if (!hitbox._active) continue;
+
+        for (const hurtbox of this.collisionsHurt()) {
+            if (!hurtbox._active) continue;
+
+            // TODO: check if hurtbox can collide with this hitbox
+            if (this.rectCollideRect(
+                hitbox.x, hitbox.endX(), hitbox.y, hitbox.endY(),
+                hurtbox.x, hurtbox.endX(), hurtbox.y, hurtbox.endY())
+            ) {
+                console.log(`Collision!`);
+            }
+        }
+    }
+};
+
+// #endregion
+
+//------------------
+// #region Collision Checking
+//------------------
+
+CollisionManager.rectCollideRect = function(rect1_x, rect1_endX, rect1_y, rect1_endy,
+                                            rect2_x, rect2_endX, rect2_y, rect2_endy) {
+    return rect1_x < rect2_endX &&
+           rect1_endX > rect2_x &&
+           rect1_y < rect2_endy &&
+           rect1_endy > rect2_y
 };
 
 // #endregion

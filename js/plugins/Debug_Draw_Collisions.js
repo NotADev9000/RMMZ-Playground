@@ -13,7 +13,7 @@
 Spriteset_Map.prototype.createUpperLayer = function() {
     this.createCollisions();
     this.createHurtboxes();
-    // hitboxes here...
+    this.createHitboxes();
     Spriteset_Base.prototype.createUpperLayer.call(this);
 };
 
@@ -26,6 +26,14 @@ Spriteset_Map.prototype.createCollisions = function() {
 Spriteset_Map.prototype.createHurtboxes = function() {
     for (const hurtbox of CollisionManager.collisionsHurt()) {
         const sprite = new Sprite_Collision(hurtbox);
+        sprite.bitmap = new Bitmap(0, 0);
+        this._collisionsContainer.addChild(sprite);
+    }
+};
+
+Spriteset_Map.prototype.createHitboxes = function() {
+    for (const hitbox of CollisionManager.collisionsHit()) {
+        const sprite = new Sprite_Collision(hitbox);
         sprite.bitmap = new Bitmap(0, 0);
         this._collisionsContainer.addChild(sprite);
     }
