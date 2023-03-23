@@ -1,5 +1,21 @@
 [
-null,
-{"id":1,"expanded":false,"name":"Test 1","order":1,"parentId":0,"scrollX":240.2962962962963,"scrollY":136.74074074074073},
-{"id":2,"expanded":false,"name":"Test 2","order":2,"parentId":0,"scrollX":270.3333333333333,"scrollY":153.83333333333334}
+  null,
+  {
+    "id": 1,
+    "expanded": false,
+    "name": "Test 1",
+    "order": 1,
+    "parentId": 0,
+    "scrollX": 0,
+    "scrollY": 0
+  },
+  {
+    "id": 2,
+    "expanded": false,
+    "name": "Test 2",
+    "order": 2,
+    "parentId": 0,
+    "scrollX": 0,
+    "scrollY": 0
+  }
 ]
