@@ -1,0 +1,6 @@
+This will format all '/Data' files so they are no longer minified.
+Only needed to see the changes made as this file is autorun on commit
+=====================================
+1. Run Powershell
+2. 'cd' into project root directory
+3. Run 'node .\.git\hooks\pre-commit'

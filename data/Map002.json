@@ -5343,7 +5343,7 @@
             "variableValid": false,
             "variableValue": 0
           },
-          "directionFix": true,
+          "directionFix": false,
           "image": {
             "tileId": 0,
             "characterName": "Chars_M_Z_1",
@@ -5358,9 +5358,49 @@
               "parameters": []
             }
           ],
-          "moveFrequency": 3,
+          "moveFrequency": 5,
           "moveRoute": {
             "list": [
+              {
+                "code": 2,
+                "indent": null
+              },
+              {
+                "code": 2,
+                "indent": null
+              },
+              {
+                "code": 2,
+                "indent": null
+              },
+              {
+                "code": 2,
+                "indent": null
+              },
+              {
+                "code": 2,
+                "indent": null
+              },
+              {
+                "code": 3,
+                "indent": null
+              },
+              {
+                "code": 3,
+                "indent": null
+              },
+              {
+                "code": 3,
+                "indent": null
+              },
+              {
+                "code": 3,
+                "indent": null
+              },
+              {
+                "code": 3,
+                "indent": null
+              },
               {
                 "code": 0,
                 "parameters": []
