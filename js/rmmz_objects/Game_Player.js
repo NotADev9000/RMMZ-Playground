@@ -36,13 +36,13 @@ Game_Player.prototype.initMembers = function() {
 };
 
 Game_Player.prototype.initHurtboxes = function() {
-    this.createHurtbox();
+    this.createHurtbox('main');
 
     // temp
-    this._collisionsHurt[0]._xOffset = -5;
-    this._collisionsHurt[0]._yOffset = -14;
-    this._collisionsHurt[0]._width = 10;
-    this._collisionsHurt[0]._height = 12;
+    this._collisionsHurt.main._xOffset = -5;
+    this._collisionsHurt.main._yOffset = -14;
+    this._collisionsHurt.main._width = 10;
+    this._collisionsHurt.main._height = 12;
 };
 
 Game_Player.prototype.initHitboxes = function() {

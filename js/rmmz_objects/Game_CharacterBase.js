@@ -61,8 +61,8 @@ Game_CharacterBase.prototype.initMembers = function() {
     this._jumpPeak = 0;
     this._movementSuccess = true;
     // collision areas
-    this._collisionsHurt = [];
-    this._collisionsHit = [];
+    this._collisionsHurt = {};
+    this._collisionsHit = {};
 };
 
 //------------------
@@ -783,18 +783,18 @@ Game_CharacterBase.prototype.collisionsHit = function() {
     return this._collisionsHit;
 };
 
-Game_CharacterBase.prototype.createHurtbox = function(addToMap = false) {
+Game_CharacterBase.prototype.createHurtbox = function(key, addToManager = false) {
     const hurtbox = new Game_CollisionHurt(0, 0, 0, 0, this);
 
-    this._collisionsHurt.push(hurtbox);
-    if (addToMap) $gameMap.addHurtbox(hurtbox);
+    this._collisionsHurt[`${key}`] = hurtbox;
+    if (addToManager) CollisionManager.addHurtbox(hurtbox);
 };
 
-Game_CharacterBase.prototype.createHitbox = function(addToMap = false) {
+Game_CharacterBase.prototype.createHitbox = function(key, addToManager = false) {
     const hitbox = new Game_CollisionHit(0, 0, 0, 0, this);
 
-    this._collisionsHit.push(hitbox);
-    if (addToMap) $gameMap.addHitbox(hitbox);
+    this._collisionsHit[`${key}`] = hitbox;
+    if (addToManager) CollisionManager.addHitbox(hitbox);
 };
 
 // #endregion

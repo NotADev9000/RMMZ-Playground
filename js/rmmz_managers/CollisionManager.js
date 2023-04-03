@@ -27,12 +27,12 @@ CollisionManager.setupCollisions = function() {
 
 CollisionManager.setupHurtboxes = function() {
     // player
-    for (const hurtbox of $gamePlayer.collisionsHurt()) {
+    for (const hurtbox of Object.values($gamePlayer.collisionsHurt())) {
         this.addHurtbox(hurtbox);
     }
     // events
     for (const event of $gameMap.events()) {
-        for (const hurtbox of event.collisionsHurt()) {
+        for (const hurtbox of Object.values(event.collisionsHurt())) {
             this.addHurtbox(hurtbox);
         }
     }
@@ -40,12 +40,12 @@ CollisionManager.setupHurtboxes = function() {
 
 CollisionManager.setupHitboxes = function() {
     // player
-    for (const hitbox of $gamePlayer.collisionsHit()) {
+    for (const hitbox of Object.values($gamePlayer.collisionsHit())) {
         this.addHitbox(hitbox);
     }
     // events
     for (const event of $gameMap.events()) {
-        for (const hitbox of event.collisionsHit()) {
+        for (const hitbox of Object.values(event.collisionsHit())) {
             this.addHitbox(hitbox);
         }
     }
