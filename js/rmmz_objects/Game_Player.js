@@ -325,8 +325,7 @@ Game_Player.prototype.updateDashing = function() {
         return;
     }
     if (this.canMove() && !this.isInVehicle() && !$gameMap.isDashDisabled()) {
-        this._dashing =
-            this.isDashButtonPressed() || $gameTemp.isDestinationValid();
+        this._dashing = this.isDashButtonPressed() || $gameTemp.isDestinationValid();
     } else {
         this._dashing = false;
     }
