@@ -12,5 +12,5 @@ State_Character_Move.update = function(machine, character) {
 };
 
 State_Character_Move.updateEnd = function(machine, character) {
-    machine.states().stop.updateEnd(character);
+    machine.states().base.updateEnd(machine, character);
 };

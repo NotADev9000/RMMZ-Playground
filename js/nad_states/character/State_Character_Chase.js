@@ -18,5 +18,5 @@ State_Character_Chase.update = function(machine, character) {
 };
 
 State_Character_Chase.updateEnd = function(machine, character) {
-    machine.states().stop.updateEnd(character);
+    machine.states().stop.updateEnd(machine, character);
 };

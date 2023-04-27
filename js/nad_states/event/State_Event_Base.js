@@ -4,8 +4,8 @@ function State_Event_Base() {
 
 State_Event_Base.updateStart = function() {};
 
-State_Event_Base.updateEnd = function(character) {
-    State_Character_Base.updateEnd(character);
+State_Event_Base.updateEnd = function(machine, character) {
+    State_Character_Base.updateEnd(machine, character);
     character.checkEventTriggerAuto();
     character.updateParallel();
 };

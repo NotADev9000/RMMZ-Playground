@@ -26,6 +26,10 @@ Machine_Character.prototype.states = function() {
     return this._states;
 };
 
+Machine_Character.prototype.state = function() {
+    return this._state;
+};
+
 //------------------
 // #region Change
 //------------------
@@ -75,7 +79,3 @@ Machine_Character.prototype.updateStateEnd = function() {
 };
 
 // #endregion
-
-
-
-

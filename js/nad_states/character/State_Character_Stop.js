@@ -4,10 +4,11 @@ function State_Character_Stop() {
 
 // STATE INHERITANCE: BASE
 
-State_Character_Stop.updateStart = function(character) {
+State_Character_Stop.updateStart = function(machine, character) {
+    machine.states().base.updateStart(machine, character);
     character._stopCount++;
 };
 
 State_Character_Stop.updateEnd = function(machine, character) {
-    machine.states().base.updateEnd(character);
+    machine.states().base.updateEnd(machine, character);
 };

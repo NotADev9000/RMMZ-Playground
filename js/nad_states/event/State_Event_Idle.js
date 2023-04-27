@@ -4,7 +4,7 @@ function State_Event_Idle() {
 
 // STATE INHERITANCE: STOP
 
-State_Event_Idle.updateStart = function() {
+State_Event_Idle.updateStart = function(machine, character) {
     machine.states().stop.updateStart(character);
 };
 
@@ -16,5 +16,5 @@ State_Event_Idle.update = function(machine, character) {
 };
 
 State_Event_Idle.updateEnd = function(machine, character) {
-    machine.states().stop.updateEnd(character);
+    machine.states().stop.updateEnd(machine, character);
 };

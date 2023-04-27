@@ -18,5 +18,5 @@ State_Event_MoveRoute__Self.update = function(machine, character) {
 };
 
 State_Event_MoveRoute__Self.updateEnd = function(machine, character) {
-    machine.states().stop.updateEnd(character);
+    machine.states().stop.updateEnd(machine, character);
 };

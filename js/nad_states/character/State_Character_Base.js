@@ -4,6 +4,6 @@ function State_Character_Base() {
 
 State_Character_Base.updateStart = function() {};
 
-State_Character_Base.updateEnd = function(character) {
+State_Character_Base.updateEnd = function(machine, character) {
     character.updateAnimation();
 };
