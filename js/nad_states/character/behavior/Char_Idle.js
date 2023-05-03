@@ -13,8 +13,8 @@ Char_Idle.prototype.initialize = function(machine) {
 //------------------
 
 Char_Idle.prototype.update = function(character) {
-    if (this.isStopping()) {
-        this._stopCount++;
+    if (character.isStopping()) {
+        character._stopCount++;
         character.machines().movement_behavior.update();
     }
 };
