@@ -129,7 +129,7 @@ Game_Character.prototype.resetAllTargets = function() {
     this.resetTargetPos();
 };
 
-Game_Character.prototype.chase = function() {
+Game_Character.prototype.isChasing = function() {
     return this._chase;
 };
 
