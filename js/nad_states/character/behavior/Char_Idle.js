@@ -14,9 +14,13 @@ Char_Idle.prototype.initialize = function(machine) {
 
 Char_Idle.prototype.update = function(character) {
     if (character.isStopping()) {
-        character._stopCount++;
-        character.machines().movement_behavior.update();
+        this.updateStop(character);
     }
+};
+
+Char_Idle.prototype.updateStop = function(character) {
+    character._stopCount++;
+    character.machines().movement_behavior.update();
 };
 
 // #endregion
