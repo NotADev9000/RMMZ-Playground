@@ -31,5 +31,5 @@ PluginManager.registerCommand('Plugin_Commands', 'event_chase_position', args =>
     const y = +args.target_y;
 
     chaser.setTargetByPos(x, y);
-    chaser.setChase(true);
+    chaser.setChasing(true);
 });

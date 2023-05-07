@@ -72,7 +72,7 @@ Game_Character.prototype.initMembers = function() {
     this._target = null;
     this._targetX = null;
     this._targetY = null;
-    this._chase = false;
+    this._chasing = false;
 };
 
 Game_Character.prototype.initMachines = function() {
@@ -138,11 +138,11 @@ Game_Character.prototype.resetAllTargets = function() {
 };
 
 Game_Character.prototype.isChasing = function() {
-    return this._chase;
+    return this._chasing;
 };
 
-Game_Character.prototype.setChase = function(chase) {
-    this._chase = chase;
+Game_Character.prototype.setChasing = function(isChasing) {
+    this._chasing = isChasing;
 };
 
 Game_Character.prototype.hasValidTargets = function() {
@@ -186,7 +186,7 @@ Game_Character.prototype.forceMoveRoute = function(moveRoute) {
 
 Game_Character.prototype.updateStop = function() {
     Game_CharacterBase.prototype.updateStop.call(this);
-    if (this._chase) {
+    if (this._chasing) {
         this.updateChase();
     } else if (this._moveRouteForcing) {
         this.updateRoutineMove();
