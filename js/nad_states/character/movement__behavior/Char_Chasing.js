@@ -13,10 +13,10 @@ Char_Chasing.prototype.initialize = function(machine) {
 //------------------
 
 Char_Chasing.prototype.update = function(character) {
-    this.updateChase(character);
+    this.updateChasing(character);
 };
 
-Char_Chasing.prototype.updateChase = function(character) {
+Char_Chasing.prototype.updateChasing = function(character) {
     character.updateTargetPos();
     if (character.hasValidTargets()) {
         const direction = character.findDirectionTo(character._targetX, character._targetY);
