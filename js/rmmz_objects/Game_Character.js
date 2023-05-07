@@ -75,6 +75,14 @@ Game_Character.prototype.initMembers = function() {
     this._chase = false;
 };
 
+Game_Character.prototype.initMachines = function() {
+    this._machines = {
+        behavior: new Machine_Char_Behavior(),
+        movement_behavior: new Machine_Char_Movement__Behavior(),
+        movement_type: new Machine_Char_Movement__Type(),
+    }
+};
+
 Game_Character.prototype.target = function() {
     return this._target;
 };

@@ -25,6 +25,7 @@ Object.defineProperties(Game_CharacterBase.prototype, {
 
 Game_CharacterBase.prototype.initialize = function() {
     this.initMembers();
+    this.initMachines();
 };
 
 Game_CharacterBase.prototype.initMembers = function() {
@@ -63,6 +64,14 @@ Game_CharacterBase.prototype.initMembers = function() {
     // collision areas
     this._collisionsHurt = {};
     this._collisionsHit = {};
+};
+
+Game_CharacterBase.prototype.initMachines = function() {
+    this._machines = {};
+};
+
+Game_Character.prototype.machines = function() {
+    return this._machines;
 };
 
 //------------------

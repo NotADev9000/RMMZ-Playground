@@ -32,6 +32,14 @@ Game_Event.prototype.initMembers = function() {
     this._locked = false;
 };
 
+Game_Event.prototype.initMachines = function() {
+    this._machines = {
+        behavior: new Machine_Event_Behavior(),
+        movement_behavior: new Machine_Event_Movement__Behavior(),
+        movement_type: new Machine_Char_Movement__Type(),
+    }
+};
+
 Game_Event.prototype.eventId = function() {
     return this._eventId;
 };
