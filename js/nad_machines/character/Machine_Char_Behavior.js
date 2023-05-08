@@ -7,7 +7,7 @@ Machine_Char_Behavior.prototype.constructor = Machine_Char_Behavior;
 Machine_Char_Behavior.prototype.initialize = function(character) {
     this._character = character;
     this.initStates();
-    this._state = null;
+    this._state = this._states.idle;
 };
 
 Machine_Char_Behavior.prototype.initStates = function() {

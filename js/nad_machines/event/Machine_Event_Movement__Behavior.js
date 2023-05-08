@@ -18,7 +18,7 @@ Machine_Event_Movement__Behavior.prototype.initStates = function() {
 // #region state - Reserve
 //------------------
 
-Machine_Char_Movement__Behavior.prototype.defaultState = function() {
+Machine_Event_Movement__Behavior.prototype.defaultState = function() {
     return this._states.move_self;
 };
 
