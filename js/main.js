@@ -47,6 +47,7 @@ const scriptUrls = [
     "js/nad_states/character/movement__behavior/Char_Chasing.js",
     "js/nad_states/character/movement__type/Char_Type_Base.js",
     "js/nad_states/character/movement__type/Char_Walk.js",
+    "js/nad_states/character/movement__type/Char_Jump.js",
     "js/nad_states/event/behavior/Event_Idle.js",
     "js/nad_states/event/movement__behavior/Event_Move_Self.js",
     "js/nad_machines/character/Machine_Char_Behavior.js",

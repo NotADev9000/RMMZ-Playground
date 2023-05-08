@@ -14,7 +14,9 @@ Char_Walk.prototype.initialize = function(machine) {
 //------------------
 
 Char_Walk.prototype.update = function(character) {
-    this.updateMove(character);
+    if (character.isMoving()) {
+        this.updateMove(character);
+    }
 };
 
 // #endregion
