@@ -63,7 +63,6 @@ Game_Character.prototype.initialize = function() {
 
 Game_Character.prototype.initMembers = function() {
     Game_CharacterBase.prototype.initMembers.call(this);
-    this._moveRouteForcing = false;
     this._moveRoute = null;
     this._moveRouteIndex = 0;
     this._originalMoveRoute = null;
@@ -77,9 +76,9 @@ Game_Character.prototype.initMembers = function() {
 
 Game_Character.prototype.initMachines = function() {
     this._machines = {
-        behavior: new Machine_Char_Behavior(),
-        movement_behavior: new Machine_Char_Movement__Behavior(),
-        movement_type: new Machine_Char_Movement__Type(),
+        behavior: new Machine_Char_Behavior(this),
+        movement_behavior: new Machine_Char_Movement__Behavior(this),
+        movement_type: new Machine_Char_Movement__Type(this),
     }
 };
 
@@ -161,11 +160,11 @@ Game_Character.prototype.restoreMoveRoute = function() {
 };
 
 Game_Character.prototype.isMoveRouteForcing = function() {
-    return this._moveRouteForcing;
+    return this._machines.movement_behavior.isState_MoveForced();
 };
 
 Game_Character.prototype.setMoveRoute = function(moveRoute) {
-    if (this._moveRouteForcing) {
+    if (this.isMoveRouteForcing()) {
         this._originalMoveRoute = moveRoute;
         this._originalMoveRouteIndex = 0;
     } else {
@@ -180,25 +179,8 @@ Game_Character.prototype.forceMoveRoute = function(moveRoute) {
     }
     this._moveRoute = moveRoute;
     this._moveRouteIndex = 0;
-    this._moveRouteForcing = true;
+    this._machines.movement_behavior.changeStateTo_MoveForced();
     this._waitCount = 0;
-};
-
-Game_Character.prototype.updateStop = function() {
-    Game_CharacterBase.prototype.updateStop.call(this);
-    if (this._chasing) {
-        this.updateChase();
-    } else if (this._moveRouteForcing) {
-        this.updateRoutineMove();
-    }
-};
-
-Game_Character.prototype.updateChase = function() {
-    this.updateTargetPos();
-    if (this.hasValidTargets()) {
-        const direction = this.findDirectionTo(this._targetX, this._targetY);
-        this.moveStraight(direction, false);
-    }
 };
 
 Game_Character.prototype.updateRoutineMove = function() {
@@ -456,8 +438,8 @@ Game_Character.prototype.moveBackward = function() {
 Game_Character.prototype.processRouteEnd = function() {
     if (this._moveRoute.repeat) {
         this._moveRouteIndex = -1;
-    } else if (this._moveRouteForcing) {
-        this._moveRouteForcing = false;
+    } else if (this.isMoveRouteForcing()) {
+        this._machines.movement_behavior.exitState_MoveForced();
         this.restoreMoveRoute();
         this.setMovementSuccess(false);
     }

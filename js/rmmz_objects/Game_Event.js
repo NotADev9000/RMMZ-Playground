@@ -34,9 +34,9 @@ Game_Event.prototype.initMembers = function() {
 
 Game_Event.prototype.initMachines = function() {
     this._machines = {
-        behavior: new Machine_Event_Behavior(),
-        movement_behavior: new Machine_Event_Movement__Behavior(),
-        movement_type: new Machine_Char_Movement__Type(),
+        behavior: new Machine_Event_Behavior(this),
+        movement_behavior: new Machine_Event_Movement__Behavior(this),
+        movement_type: new Machine_Char_Movement__Type(this),
     }
 };
 
@@ -84,36 +84,6 @@ Game_Event.prototype.unlock = function() {
     if (this._locked) {
         this._locked = false;
         this.setDirection(this._prelockDirection);
-    }
-};
-
-Game_Event.prototype.updateStop = function() {
-    if (this._locked) {
-        this.resetStopCount();
-    }
-    Game_Character.prototype.updateStop.call(this);
-    if (!this.isChasing() && !this.isMoveRouteForcing()) {
-        this.updateSelfMovement();
-    }
-};
-
-Game_Event.prototype.updateSelfMovement = function() {
-    if (
-        !this._locked &&
-        this.isNearTheScreen() &&
-        this.checkStop(this.stopCountThreshold())
-    ) {
-        switch (this._moveType) {
-            case 1:
-                this.moveTypeRandom();
-                break;
-            case 2:
-                this.moveTypeTowardPlayer();
-                break;
-            case 3:
-                this.moveTypeCustom();
-                break;
-        }
     }
 };
 

@@ -70,7 +70,7 @@ Game_CharacterBase.prototype.initMachines = function() {
     this._machines = {};
 };
 
-Game_Character.prototype.machines = function() {
+Game_CharacterBase.prototype.machines = function() {
     return this._machines;
 };
 
@@ -713,6 +713,9 @@ Game_CharacterBase.prototype.jump = function(xPlus, yPlus) {
     const distance = Math.round(Math.sqrt(xPlus * xPlus + yPlus * yPlus));
     this._jumpPeak = 10 + distance - this._moveSpeed;
     this._jumpCount = this._jumpPeak * 2;
+    if (this._jumpCount !== 0) {
+        this._machines.movement_type.changeStateTo_Jump();
+    }
     this.resetStopCount();
     this.straighten();
 };
@@ -724,50 +727,9 @@ Game_CharacterBase.prototype.jump = function(xPlus, yPlus) {
 //------------------
 
 Game_CharacterBase.prototype.update = function() {
-    if (this.isStopping()) {
-        this.updateStop();
-    }
-    if (this.isJumping()) {
-        this.updateJump();
-    } else if (this.isMoving()) {
-        this.updateMove();
-    }
+    this._machines.behavior.update();
+    this._machines.movement_type.update();
     this.updateAnimation();
-};
-
-Game_CharacterBase.prototype.updateStop = function() {
-    this._stopCount++;
-};
-
-Game_CharacterBase.prototype.updateJump = function() {
-    this._jumpCount--;
-    this._realX =
-        (this._realX * this._jumpCount + this._x) / (this._jumpCount + 1.0);
-    this._realY =
-        (this._realY * this._jumpCount + this._y) / (this._jumpCount + 1.0);
-    this.refreshBushDepth();
-    if (this._jumpCount === 0) {
-        this._realX = this._x = $gameMap.roundX(this._x);
-        this._realY = this._y = $gameMap.roundY(this._y);
-    }
-};
-
-Game_CharacterBase.prototype.updateMove = function() {
-    if (this._x < this._realX) {
-        this._realX = Math.max(this._realX - this.distancePerFrame(), this._x);
-    }
-    if (this._x > this._realX) {
-        this._realX = Math.min(this._realX + this.distancePerFrame(), this._x);
-    }
-    if (this._y < this._realY) {
-        this._realY = Math.max(this._realY - this.distancePerFrame(), this._y);
-    }
-    if (this._y > this._realY) {
-        this._realY = Math.min(this._realY + this.distancePerFrame(), this._y);
-    }
-    if (!this.isMoving()) {
-        this.refreshBushDepth();
-    }
 };
 
 Game_CharacterBase.prototype.updateAnimation = function() {

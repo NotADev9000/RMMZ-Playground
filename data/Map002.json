@@ -5457,19 +5457,11 @@
           "moveRoute": {
             "list": [
               {
-                "code": 2,
+                "code": 3,
                 "indent": null
               },
               {
-                "code": 2,
-                "indent": null
-              },
-              {
-                "code": 2,
-                "indent": null
-              },
-              {
-                "code": 2,
+                "code": 1,
                 "indent": null
               },
               {
@@ -5477,23 +5469,7 @@
                 "indent": null
               },
               {
-                "code": 3,
-                "indent": null
-              },
-              {
-                "code": 3,
-                "indent": null
-              },
-              {
-                "code": 3,
-                "indent": null
-              },
-              {
-                "code": 3,
-                "indent": null
-              },
-              {
-                "code": 3,
+                "code": 4,
                 "indent": null
               },
               {
@@ -5505,13 +5481,13 @@
             "skippable": false,
             "wait": false
           },
-          "moveSpeed": 3,
+          "moveSpeed": 2,
           "moveType": 0,
           "priorityType": 1,
           "stepAnime": false,
           "through": false,
           "trigger": 0,
-          "walkAnime": false
+          "walkAnime": true
         },
         {
           "conditions": {
@@ -5573,6 +5549,14 @@
                   2,
                   0
                 ],
+                "indent": null
+              },
+              {
+                "code": 3,
+                "indent": null
+              },
+              {
+                "code": 3,
                 "indent": null
               },
               {
