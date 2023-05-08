@@ -5193,7 +5193,8 @@
               "parameters": [
                 [
                   "tele",
-                  "make zomb follow"
+                  "make zomb follow",
+                  "make zomb move route"
                 ],
                 -2,
                 0,
@@ -5267,6 +5268,92 @@
               "indent": 1,
               "parameters": [
                 "Target Y = 9"
+              ]
+            },
+            {
+              "code": 0,
+              "indent": 1,
+              "parameters": []
+            },
+            {
+              "code": 402,
+              "indent": 0,
+              "parameters": [
+                2,
+                "make zomb move route"
+              ]
+            },
+            {
+              "code": 205,
+              "indent": 1,
+              "parameters": [
+                3,
+                {
+                  "list": [
+                    {
+                      "code": 2,
+                      "indent": null
+                    },
+                    {
+                      "code": 1,
+                      "indent": null
+                    },
+                    {
+                      "code": 3,
+                      "indent": null
+                    },
+                    {
+                      "code": 4,
+                      "indent": null
+                    },
+                    {
+                      "code": 0
+                    }
+                  ],
+                  "repeat": false,
+                  "skippable": false,
+                  "wait": false
+                }
+              ]
+            },
+            {
+              "code": 505,
+              "indent": 1,
+              "parameters": [
+                {
+                  "code": 2,
+                  "indent": null
+                }
+              ]
+            },
+            {
+              "code": 505,
+              "indent": 1,
+              "parameters": [
+                {
+                  "code": 1,
+                  "indent": null
+                }
+              ]
+            },
+            {
+              "code": 505,
+              "indent": 1,
+              "parameters": [
+                {
+                  "code": 3,
+                  "indent": null
+                }
+              ]
+            },
+            {
+              "code": 505,
+              "indent": 1,
+              "parameters": [
+                {
+                  "code": 4,
+                  "indent": null
+                }
               ]
             },
             {

@@ -28,7 +28,7 @@ Machine_Char_Movement__Behavior.prototype.update = function() {
 // #endregion
 
 //------------------
-// #region state - Reserve
+// #region Reserve
 //------------------
 
 Machine_Char_Movement__Behavior.prototype.defaultState = function() {
@@ -42,7 +42,21 @@ Machine_Char_Movement__Behavior.prototype.setReservedState = function(state) {
 // #endregion
 
 //------------------
-// #region State - Change
+// #region Check
+//------------------
+
+Machine_Char_Movement__Behavior.prototype.isState_MoveForced = function() {
+    return this._state === this._states.move_forced;
+};
+
+Machine_Char_Movement__Behavior.prototype.isState_Chasing = function() {
+    return this._state === this._states.chasing;
+};
+
+// #endregion
+
+//------------------
+// #region Change
 //------------------
 
 Machine_Char_Movement__Behavior.prototype.changeState = function(state) {
@@ -55,7 +69,7 @@ Machine_Char_Movement__Behavior.prototype.changeStateTo_MoveForced = function() 
 
 Machine_Char_Movement__Behavior.prototype.changeStateTo_Chasing = function() {
     // move_forced state has priority over chasing state
-    if (this._state === this._states.move_forced) {
+    if (this.isState_MoveForced()) {
         this.setReservedState(this._states.chasing);
     } else {
         this.changeState(this._states.chasing);
@@ -65,18 +79,18 @@ Machine_Char_Movement__Behavior.prototype.changeStateTo_Chasing = function() {
 // #endregion
 
 //------------------
-// #region State - Exit
+// #region Exit
 //------------------
 
 Machine_Char_Movement__Behavior.prototype.exitState_Chasing = function() {
     this.setReservedState(this.defaultState());
-    if (this._state === this._states.chasing) {
+    if (this.isState_Chasing()) {
         this.exitCurrentState();
     }
 };
 
 Machine_Char_Movement__Behavior.prototype.exitState_MoveForced = function() {
-    if (this._state === this._states.move_forced) {
+    if (this.isState_MoveForced()) {
         this.exitCurrentState();
     }  
 };

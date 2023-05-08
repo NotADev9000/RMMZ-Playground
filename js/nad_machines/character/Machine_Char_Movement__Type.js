@@ -38,6 +38,16 @@ Machine_Char_Movement__Type.prototype.defaultState = function() {
 // #endregion
 
 //------------------
+// #region Check
+//------------------
+
+Machine_Char_Movement__Type.prototype.isState_Jump = function() {
+    return this._state === this._states.jump;
+};
+
+// #endregion
+
+//------------------
 // #region Change
 //------------------
 
@@ -56,7 +66,7 @@ Machine_Char_Movement__Type.prototype.changeStateTo_Jump = function() {
 //------------------
 
 Machine_Char_Movement__Type.prototype.exitState_Jump = function() {
-    if (this._state === this._states.jump) {
+    if (this.isState_Jump()) {
         this.changeState(this.defaultState());
     }
 };
