@@ -4,9 +4,7 @@ function Char_Move_Forced() {
 
 Char_Move_Forced.prototype.constructor = Char_Move_Forced;
 
-Char_Move_Forced.prototype.initialize = function(machine) {
-    this._machine = machine;
-};
+Char_Move_Forced.prototype.initialize = function() {};
 
 //------------------
 // #region Update

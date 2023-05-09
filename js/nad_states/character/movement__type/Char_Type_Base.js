@@ -2,9 +2,7 @@ function Char_Type_Base() {
     this.initialize(...arguments);
 }
 
-Char_Type_Base.prototype.initialize = function(machine) {
-    this._machine = machine;
-};
+Char_Type_Base.prototype.initialize = function() {};
 
 //------------------
 // #region Update

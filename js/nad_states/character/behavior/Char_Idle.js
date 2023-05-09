@@ -4,9 +4,7 @@ function Char_Idle() {
 
 Char_Idle.prototype.constructor = Char_Idle;
 
-Char_Idle.prototype.initialize = function(machine) {
-    this._machine = machine;
-};
+Char_Idle.prototype.initialize = function() {};
 
 //------------------
 // #region Update

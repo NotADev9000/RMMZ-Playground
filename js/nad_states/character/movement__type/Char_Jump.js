@@ -5,8 +5,8 @@ function Char_Jump() {
 Char_Jump.prototype = Object.create(Char_Type_Base.prototype);
 Char_Jump.prototype.constructor = Char_Jump;
 
-Char_Jump.prototype.initialize = function(machine) {
-    Char_Type_Base.prototype.initialize.call(this, machine);
+Char_Jump.prototype.initialize = function() {
+    Char_Type_Base.prototype.initialize.call(this);
 };
 
 //------------------

@@ -4,9 +4,7 @@ function Char_Chasing() {
 
 Char_Chasing.prototype.constructor = Char_Chasing;
 
-Char_Chasing.prototype.initialize = function(machine) {
-    this._machine = machine;
-};
+Char_Chasing.prototype.initialize = function() {};
 
 //------------------
 // #region Update

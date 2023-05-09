@@ -5,8 +5,8 @@ function Event_Idle() {
 Event_Idle.prototype = Object.create(Char_Idle.prototype);
 Event_Idle.prototype.constructor = Event_Idle;
 
-Event_Idle.prototype.initialize = function(machine) {
-    Char_Idle.prototype.initialize.call(this, machine);
+Event_Idle.prototype.initialize = function() {
+    Char_Idle.prototype.initialize.call(this);
 };
 
 //------------------

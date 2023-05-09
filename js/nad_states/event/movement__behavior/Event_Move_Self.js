@@ -4,9 +4,7 @@ function Event_Move_Self() {
 
 Event_Move_Self.prototype.constructor = Event_Move_Self;
 
-Event_Move_Self.prototype.initialize = function(machine) {
-    this._machine = machine;
-};
+Event_Move_Self.prototype.initialize = function() {};
 
 //------------------
 // #region Update
