@@ -35,6 +35,14 @@ Game_Player.prototype.initMembers = function() {
     this._encounterCount = 0;
 };
 
+Game_Player.prototype.initMachines = function() {
+    this._machines = {
+        behavior: new Machine_Player_Behavior(this),
+        movement_behavior: new Machine_Player_Movement__Behavior(this),
+        movement_type: new Machine_Char_Movement__Type(this),
+    }
+};
+
 Game_Player.prototype.initHurtboxes = function() {
     this.createHurtbox('main');
 
@@ -307,10 +315,6 @@ Game_Player.prototype.update = function(sceneActive) {
     const lastScrolledX = this.scrolledX();
     const lastScrolledY = this.scrolledY();
     const wasMoving = this.isMoving();
-    this.updateDashing();
-    if (sceneActive) {
-        this.moveByInput();
-    }
     Game_Character.prototype.update.call(this);
     this.updateScroll(lastScrolledX, lastScrolledY);
     this.updateVehicle();

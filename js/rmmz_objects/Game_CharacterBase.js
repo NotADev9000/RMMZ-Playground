@@ -727,9 +727,13 @@ Game_CharacterBase.prototype.jump = function(xPlus, yPlus) {
 //------------------
 
 Game_CharacterBase.prototype.update = function() {
+    this.updateMachines();
+    this.updateAnimation();
+};
+
+Game_CharacterBase.prototype.updateMachines = function() {
     this._machines.behavior.update();
     this._machines.movement_type.update();
-    this.updateAnimation();
 };
 
 Game_CharacterBase.prototype.updateAnimation = function() {

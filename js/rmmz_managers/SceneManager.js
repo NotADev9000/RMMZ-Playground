@@ -17,6 +17,10 @@ SceneManager._backgroundBitmap = null;
 SceneManager._smoothDeltaTime = 1;
 SceneManager._elapsedTime = 0;
 
+SceneManager.scene = function() {
+    return this._scene;
+};
+
 SceneManager.run = function(sceneClass) {
     try {
         this.initialize();
