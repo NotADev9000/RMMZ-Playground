@@ -39,7 +39,7 @@ Game_Player.prototype.initMachines = function() {
     this._machines = {
         behavior: new Machine_Player_Behavior(this),
         movement_behavior: new Machine_Player_Movement__Behavior(this),
-        movement_type: new Machine_Char_Movement__Type(this),
+        movement_type: new Machine_Player_Movement__Type(this),
     }
 };
 
@@ -271,22 +271,6 @@ Game_Player.prototype.startMapEvent = function(x, y, triggers, normal, checkAlig
     }
 };
 
-Game_Player.prototype.moveByInput = function() {
-    if (!this.isMoving() && this.canMove()) {
-        let direction = this.getInputDirection();
-        if (direction > 0) {
-            $gameTemp.clearDestination();
-        } else if ($gameTemp.isDestinationValid()) {
-            const x = $gameTemp.destinationX();
-            const y = $gameTemp.destinationY();
-            direction = this.findDirectionTo(x, y);
-        }
-        if (direction > 0) {
-            this.executeMove(direction);
-        }
-    }
-};
-
 Game_Player.prototype.canMove = function() {
     if ($gameMap.isEventRunning() || $gameMessage.isBusy()) {
         return false;
@@ -322,17 +306,6 @@ Game_Player.prototype.update = function(sceneActive) {
         this.updateNonmoving(wasMoving, sceneActive);
     }
     this._followers.update();
-};
-
-Game_Player.prototype.updateDashing = function() {
-    if (this.isMoving()) {
-        return;
-    }
-    if (this.canMove() && !this.isInVehicle() && !$gameMap.isDashDisabled()) {
-        this._dashing = this.isDashButtonPressed() || $gameTemp.isDestinationValid();
-    } else {
-        this._dashing = false;
-    }
 };
 
 Game_Player.prototype.isDashButtonPressed = function() {

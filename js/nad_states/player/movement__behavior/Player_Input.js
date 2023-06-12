@@ -11,13 +11,33 @@ Player_Input.prototype.initialize = function() {};
 //------------------
 
 Player_Input.prototype.update = function(character) {
-    // add update dashing
+    this.updateRunning(character);
     if (SceneManager.scene().isPlayerActive()) {
         this.moveByInput(character);
     }
 };
 
 // #endregion
+
+Player_Input.prototype.updateRunning = function(character) {
+    if (character.isMoving()) {
+        return;
+    }
+
+    let running = false;
+    // can run
+    if (character.canMove() && !character.isInVehicle() && !$gameMap.isDashDisabled()) {
+        // is pressing run
+        running = character.isDashButtonPressed() || $gameTemp.isDestinationValid();
+    }
+
+    // update move_type state
+    if (running) {
+        character.machines().movement_type.changeStateTo_Run();
+    } else {
+        character.machines().movement_type.exitState_Run();
+    }
+};
 
 Player_Input.prototype.moveByInput = function(character) {
     if (!character.isMoving() && character.canMove()) {

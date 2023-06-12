@@ -8,7 +8,11 @@ Char_Type_Base.prototype.initialize = function() {};
 // #region Update
 //------------------
 
-Char_Type_Base.prototype.update = function() {};
+Char_Type_Base.prototype.update = function(character) {
+    if (character.isMoving()) {
+        this.updateMove(character);
+    }
+};
 
 Char_Type_Base.prototype.updateMove = function(character) {
     if (character._x < character._realX) {
@@ -39,7 +43,7 @@ Char_Type_Base.prototype.realMoveSpeed = function(character) {
 };
 
 Char_Type_Base.prototype.distancePerFrame = function(character) {
-    return Math.pow(2, character.realMoveSpeed(character)) / 256;
+    return Math.pow(2, this.realMoveSpeed(character)) / 256;
 };
 
 // #endregion
