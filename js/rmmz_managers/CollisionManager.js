@@ -49,11 +49,18 @@ CollisionManager.setupHitboxes = function() {
             this.addHitbox(hitbox);
         }
     }
-    // DEBUGGING
+    // DEBUGGING ////////////////////////////////////////////////////
     this.addHitbox(
         new Game_CollisionHit(8, -16, 8, 16, $gameMap.events()[2])
     );
     this._collisionAreas[1][0]._active = true;
+    this.addHitbox(
+        new Game_CollisionHit(-8, -32, 16, 16, $gameMap.events()[3])
+    );
+    this.addHitbox(
+        new Game_CollisionHit(-24, -32, 48, 48, $gameMap.events()[4])
+    );
+    this._collisionAreas[1][2]._active = true;
 };
 
 // #endregion
@@ -105,6 +112,7 @@ CollisionManager.update = function() {
                 hurtbox.x, hurtbox.endX(), hurtbox.y, hurtbox.endY())
             ) {
                 console.log(`Collision!`);
+                $gameMap._interpreter.command212([-1, 121, false]);
             }
         }
     }

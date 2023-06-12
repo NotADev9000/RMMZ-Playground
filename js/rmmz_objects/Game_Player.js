@@ -51,6 +51,7 @@ Game_Player.prototype.initHurtboxes = function() {
     this._collisionsHurt.main._yOffset = -14;
     this._collisionsHurt.main._width = 10;
     this._collisionsHurt.main._height = 12;
+    this._collisionsHurt.main._active = true;
 };
 
 Game_Player.prototype.initHitboxes = function() {

@@ -36,7 +36,8 @@
         }
       }
     ],
-    "speed": 100
+    "speed": 100,
+    "timings": []
   },
   {
     "id": 2,
@@ -149,7 +150,8 @@
         }
       }
     ],
-    "speed": 100
+    "speed": 100,
+    "timings": []
   },
   {
     "id": 4,
@@ -9654,5 +9656,33 @@
       }
     ],
     "speed": 100
+  },
+  {
+    "id": 121,
+    "animation1Hue": 0,
+    "animation1Name": "",
+    "animation2Hue": 0,
+    "animation2Name": "",
+    "frames": [
+      []
+    ],
+    "name": "Flash White",
+    "position": 1,
+    "timings": [
+      {
+        "frame": 0,
+        "se": null,
+        "flashScope": 1,
+        "flashColor": [
+          255,
+          255,
+          255,
+          255
+        ],
+        "flashDuration": 1
+      }
+    ],
+    "flashTimings": [],
+    "soundTimings": []
   }
 ]
